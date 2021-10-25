@@ -26,6 +26,17 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 
 The dataset we selected consists of subway traffic in NYC, along with neighbourhood census data of the city. It is hosted on Kaggle by Edden, who has performed preprocessing steps to convert the raw data provided by The Metropolitan Transportation Authority (MTA), North America's largest transportation network. The census data is from NYU Furman Center's New York City Neighborhood Data Profiles and the neighborhood data is from University of Berkeley GeoData Library.
 
+### Problem Statement
+
+Public transport has become a necessity in our modern landscape. Agencies are interested in capitilising on data on public transport usage such as subway traffic to inform their location based business decisions.
+
+Government entities involved in urban planning might utilise subway traffic conditions to determine neighbourhoods that could benefit from neighbourhood rejuvenation or to inform other land usage planning decisions.
+
+Alternatively, businesses such as the real estate and media industries can benefit from integrating subway traffic conditions as their decision making factors. Subway traffic can greatly affect real estate prices, thus this can inform real estate developers in their development strategies. Subway traffic can also inform media agencies of their audience, allowing them to identify prime locations for their advertisement campaigns.
+
+### Approach
+
+The baseline model is built for a time series binary classification problem to predict whether subway traffic is high or low.
 
 ## References
 
