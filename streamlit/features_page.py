@@ -92,7 +92,10 @@ def plot_histogram(series):
 
     return fig
 
-def render(df):
+def render(extract_data):
+    df = extract_data('csv')
+    st.sidebar.title('Options')
+    # Main
     col1, col2 = st.columns([0.6, 0.4])
 
     with col1:
@@ -100,11 +103,11 @@ def render(df):
         st.dataframe(df.sample(100))
 
     with col2:
-        st.subheader('Inferred data types')
+        st.subheader('Inferred Data Types')
         dtype_dict = infer_dtypes(df)
         st.json(dtype_dict)
 
-    numerical_cols_width_prop = 0.6
+    numerical_cols_width_prop = 0.5
     numerical_col, categorical_col = st.columns([
           numerical_cols_width_prop, 
           1 - numerical_cols_width_prop
@@ -112,15 +115,28 @@ def render(df):
     
     with numerical_col:
         numerical_col_names = [col for col, dtype in dtype_dict.items() if dtype == 'numerical']
-        st.subheader('Numerical features (' + str(len(numerical_col_names)) + ')')
-
+        num_num = len(numerical_col_names)
+        subset_numerical_col = numerical_col_names[0:num_num+1]
+        if num_num > 4:
+            subset_numerical_col = numerical_col_names[0:5]
+        select_numerical_col = st.sidebar.multiselect('Numerical Features (' + str(len(numerical_col_names)) + ')', 
+                               options=numerical_col_names,
+                               default=subset_numerical_col) 
+        st.subheader('Numerical features (' + str(len(select_numerical_col)) + ')')
     with categorical_col:
         categorical_col_names = [col for col, dtype in dtype_dict.items() if dtype == 'categorical']
-        st.subheader('Categorical features (' + str(len(categorical_col_names)) + ')')
+        num_cat = len(categorical_col_names)
+        subset_categorical_cols = categorical_col_names[0:num_cat+1]
+        if num_cat > 4:
+            subset_categorical_cols = categorical_col_names[0:5]
+        select_categorical_col = st.sidebar.multiselect('Categorical Features (' + str(len(categorical_col_names)) + ')', 
+                                options=categorical_col_names,
+                                default=subset_categorical_cols) 
+        st.subheader('Categorical features (' + str(len(select_categorical_col)) + ')')
 
     # Calculate summaries
-    numerical_summary_df = numerical_cols_summary_stats(df, numerical_col_names)
-    categorical_summary_df = categorical_cols_summary_stats(df, categorical_col_names)
+    numerical_summary_df = numerical_cols_summary_stats(df, select_numerical_col)
+    categorical_summary_df = categorical_cols_summary_stats(df, select_categorical_col)
 
     # Get column specifications for rendering
     spec = get_spec(numerical_summary_df, 
