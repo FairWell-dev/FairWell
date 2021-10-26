@@ -74,16 +74,16 @@ The entries and exits were summed to get the total traffic flow in each subway s
 
 ## References
 
-Amazon AI Fairness and Explainability Whitepaper: https://pages.awscloud.com/rs/112-TZM-766/images/Amazon.AI.Fairness.and.Explainability.Whitepaper.pdf 
-Facebook’s five pillars of Responsible AI: https://ai.facebook.com/blog/facebooks-five-pillars-of-responsible-ai/ 
-Fairness Indicators: https://github.com/tensorflow/fairness-indicators
-How Facebook got addicted to spreading misinformation: https://www.technologyreview.com/2021/03/11/1020600/facebook-responsible-ai-misinformation/
-Normal and New Normal: NYC Subway Traffic 2017-21: https://www.kaggle.com/eddeng/nyc-subway-traffic-data-20172021
-What-If Tool: https://pair-code.github.io/what-if-tool/
-[^1]: https://www.researchgate.net/publication/228716874_Integration_of_public_transport_and_urban_planning
-[^2]: https://www.hindawi.com/journals/ddns/2016/1478413/
-[^3]: https://www.nytimes.com/interactive/2021/03/08/climate/nyc-transit-covid.html
-[^4]: https://www.hindawi.com/journals/mpe/2020/1871423/
+- [Amazon AI Fairness and Explainability Whitepaper](https://pages.awscloud.com/rs/112-TZM-766/images/Amazon.AI.Fairness.and.Explainability.Whitepaper.pdf)
+- [Facebook’s five pillars of Responsible AI](https://ai.facebook.com/blog/facebooks-five-pillars-of-responsible-ai/)
+- [Fairness Indicators](https://github.com/tensorflow/fairness-indicators)
+- [How Facebook got addicted to spreading misinformation](https://www.technologyreview.com/2021/03/11/1020600/facebook-responsible-ai-misinformation/)
+- [Normal and New Normal NYC Subway Traffic 2017-21](https://www.kaggle.com/eddeng/nyc-subway-traffic-data-20172021)
+- [What-If Tool](https://pair-code.github.io/what-if-tool/)
+- [https://www.researchgate.net/publication/-228716874_Integration_of_public_transport_and_urban_planning](https://www.researchgate.net/publication/-228716874_Integration_of_public_transport_and_urban_planning)[^1]: 
+- [https://www.hindawi.com/journals/ddns/2016/1478413/](https://www.hindawi.com/journals/ddns/2016/1478413/)[^2]: 
+- [https://www.nytimes.com/interactive/2021/03/08/climate/nyc-transit-covid.html](https://www.nytimes.com/interactive/2021/03/08/climate/nyc-transit-covid.html)[^3]: 
+- [https://www.hindawi.com/journals/mpe/2020/1871423/](https://www.hindawi.com/journals/mpe/2020/1871423/)[^4]: 
 
 
 
