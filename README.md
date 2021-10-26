@@ -21,6 +21,16 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 - Transparency & Control
 - Accountability & Governance
 
+### Fairness Metrics
+The problem of defining and addressing fairness has been a topic of increasing importance in the recent years, especially with work surrounding machine learning. Multiple definitions of fairness have been raised, each having their own pros and cons. This work does not aim to propose a single notion of fairness but rather we aim to (i) provide tools on how to measure and assess fairness and (ii) how to mitigate bias in models where necessary. Furthermore with respect to (ii), bias removing techniques can be broadly catergorised into pre-processing on data, in-processing by imposing constraints during training and post-processing where the results of the models are modified. (https://arxiv.org/pdf/2106.00467.pdf) This work takes the approach of the in-processing technique. 
+
+Generally, fairness definitions can be categorised into 4 areas, (i) individual, (ii) group, (iii) per group performance (https://arxiv.org/pdf/2006.13114.pdf).
+
+**Individual Fairness.** Fairness definitions at the individual level focuses on the relative similarity between individuals. Therefore, similar individuals should be treated similarly with similar decisions. (https://arxiv.org/pdf/2006.13114.pdf)
+
+**Group Fairness.** Group fairness as the term suggests, focuses on reducing bias for a group of individuals. It is believed that different groups of people are being unfairly treated and thus aims to attain fairness for each respective group. Some popular definitions of group fairness include but not limited to Demographic Parity, Equal Oportunity, etc. (https://arxiv.org/pdf/2006.13114.pdf)
+
+**Per Group Performance Fairness.** Another school of thought for fairness is the idea of per group performance. This school of thought attempts to maximise the utility of an individual group to attain fairness. Examples include Pareto-fairness and Rawlsian Max-Min fairness. (https://arxiv.org/pdf/2006.13114.pdf)
 
 ## Dataset: New York City (NYC) Subway Traffic
 
