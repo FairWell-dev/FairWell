@@ -50,7 +50,10 @@ The baseline model is built for a time series binary classification problem to p
 
 ### Data preprocessing
 
+#### Neighbourhood Census Data
+
 The neighbourhood census data of the city consisted of a total of 87 columns, out of which we selected 15 columns to be included in the final dataset. Of these 15 columns, none contained missing data points.
+
 * Neighborhood
 * Car-free commute (% of commuters)
 * Disabled population
@@ -67,19 +70,59 @@ The neighbourhood census data of the city consisted of a total of 87 columns, ou
 * Public housing (% of rental units)
 * Unemployment rate
 
-As the neighbourhood census data was taken on June 2020, we selected 3 months worth of data from the subway data between Apr-Jun 2020, with the assumption that the neighbourhood census data stays constant for the 3 months. 10 columns were then selected to be in the final dataset.
+#### Subway Data
+
+As the neighbourhood census data was taken on June 2020, we selected 3 months worth of data from the subway data between Apr-Jun 2020, with the assumption that the neighbourhood census data stays constant for the 3 months. 
+
+**Missing Values**
+
+The Subway Dataset has the following columns with missing data. Upon further evaluation of these columns, we decided to drop these two columns.
+| Column Header  | Percentage Missing |
+| ------------- | ------------- |
+| North Direction Label	  | 3.198842  |
+| South Direction Label	  | 2.585992  |
+
+
+**One Hot Encoding**
+
+One Hot Encoding was done for the following categorical columns: - "Division", "Structure", "Borough", "Connecting Lines", "Daytime Route". Upon performing One Hot Encoding on these, columns, we conducted a correlation analysis to check for high correlated columns that may result in the Curse of Dimensionality. We discovered that there was a high correlation between the "Connecting Lines" column and the "Daytime Route" column. As such, we dropped the "Daytime Route" column. 
+
+**Binary Target Variable**
+
+The current subway dataset has no clear target output. Hence, we want to aggregate the current 'Entry' and 'Exit' columns such that we can get a target binary column (EntriesExit) for our model. We combine the current 'Entry' and 'Exit' columns by summing them up to aggregate the total number of people passing through the station in each 4 hr interval. We then find the median number of people passing through all the neighbourhoods in each Datetime period. If EntriesExit value is greater than the median, we classify that it is crowded (1) and vice versa to get a target binary column. We chose to split the column by median to ensure that our target binary column would have a more uniform distribution and prevent imbalanced data.
+
+9 columns were then selected to be in the final dataset.
 * Datetime
 * Stop Name
 * Connecting Lines
-* Daytime Routes
 * Division
 * Structure
 * Borough
 * Neighbourhood
-* Entries
-* Exits
+* EntriesExit (Target Binary)
 
-The entries and exits were summed to get the total traffic flow in each subway station for each period. One-hot encoding is then done for - "Division", "Structure", "Borough", "Connecting Lines" and "Daytime Routes" - before merging the subway data and neighbourhood census data into the final dataset.
+### Feature Engineering
+
+Feature Engineering was done on 2 columns: num_of_stations and Neighbourhood Area size. Num_of_stations was derived by grouping the subway data by neighbourhood to find the number of unique stations in each neighbourhood. Neighbourhood Area Size was derived from the original neighbourhood census data columns: Population and Population density (1000 persons per square mile).
+
+Lastly, we merged the two datasets together. Our final dataset contains the following features:
+
+| Features  | Features  |
+| ------------- | ------------- |
+| Neighbourhood	  | Percent Asian	  |
+| Datetime	  | Percent Hispanic	  | 
+| **EntriesExit**	  | Percent black	  | 
+| Division	  | Percent white	  | 
+| Structure	  | Population	  | 
+| Borough	  | Poverty rate	  | 
+| Car-free commute (% of commuters)	  | Public housing (% of rental units)	  | 
+| Disabled population		  | Unemployment rate	  | 
+| Foreign-born population	  | Residential units within 12 mile of a subway station		  | 
+| Median household income (2018$)	  | Population density (1,000 persons per square mile)		  | 
+| Median rent, all (2018$)	  | Serious crime rate (per 1,000 residents)		  | 
+| Severely rent-burdened households		  | Rental vacancy rate		  | 
+| Mean travel time to work (minutes)		  | Area (in sq miles)		  | 
+
 
 
 ## References
