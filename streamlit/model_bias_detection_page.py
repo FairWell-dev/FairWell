@@ -64,6 +64,7 @@ def render(sidebar_handler):
         df = selected
         df_list = all_data_models
 
+    model_name_list = ['Model 1']
     dtype_dict = infer_dtypes(df)
 
     # Main
@@ -76,24 +77,24 @@ def render(sidebar_handler):
         target = st.selectbox('Target feature (categorical)', options=[col for col in df.columns
                                                          if (dtype_dict[col] == 'categorical')])
 
-        prediction = st.selectbox('Predictions', options=[col for col in df.columns
-                                                         if (target != col) and (dtype_dict[col] == 'categorical')])
+        prediction = target + '_prediction'
 
-    with col2:
         cols_to_eval = st.multiselect('Categorical features to evaluate for fairness', 
                                   options=[col for col in df.columns 
                                   if (col not in [target, prediction]) and (dtype_dict[col] == 'categorical')])
 
+        x_axis_metric = 'Accuracy'
         y_axis_metric = st.radio('Metric to plot (y-axis)', 
                                  options=['Demographic Parity', 'Equalized Odds', 'Predictive Parity'])
 
-    run_comparison = st.button('Run Fairness Assessment and Model Comparison')
-    
-    with st.expander('Show subgroups (unique values) of features to evaluate'):
-        unique_vals_dict = dict()
-        for col in cols_to_eval:
-            unique_vals_dict[col] = str(np.sort(df[col].unique()).tolist())
-        st.json(unique_vals_dict)
+        run_comparison = st.button('Run Fairness Assessment and Model Comparison')
+
+    with col2:
+        with st.expander('Show subgroups (unique values) of features to evaluate'):
+            unique_vals_dict = dict()
+            for col in cols_to_eval:
+                unique_vals_dict[col] = str(np.sort(df[col].unique()).tolist())
+            st.json(unique_vals_dict)
 
     if df[target].nunique() > 2:
             run_comparison = False
@@ -103,7 +104,7 @@ def render(sidebar_handler):
         st.subheader('Fairness Assessment and Model Comparison')
 
         for col_name in cols_to_eval:
-            st.markdown('##### ' + col_name)
+            st.markdown('##### ' + col_name.replace('_', ' '))
 
             nunique = df[col_name].nunique()
             if nunique > 10:
@@ -114,6 +115,7 @@ def render(sidebar_handler):
 
             with col1:
                 # Calculate overall scores
+                acc = skm.accuracy_score(df[target], df[prediction])
                 dpd = flm.demographic_parity_difference(y_true=df[target],
                                                         y_pred=df[prediction], 
                                                         sensitive_features=df[col_name],
@@ -127,64 +129,46 @@ def render(sidebar_handler):
                                                    sensitive_feature=df[col_name])
 
                 overall_df = pd.DataFrame({
-                    'Demographic Parity Difference': [dpd],
-                    'Equalised Odds Difference': [eod],
-                    'Predictive Parrity Difference': [ppd]
-                }, index=['Overall'])
+                    'Accuracy': [acc],
+                    'Demographic Parity': [dpd],
+                    'Equalised Odds': [eod],
+                    'Predictive Parity': [ppd]
+                }, index=model_name_list)
                 st.table(overall_df)
 
-                grouped_metric = flm.MetricFrame(metrics={'N': flm.count,
-                                            'Accuracy': skm.accuracy_score,
-                                            'Selection Rate': flm.selection_rate,
-                                            'True Positive Rate': flm.true_positive_rate,
-                                            'False Positive Rate': flm.false_positive_rate,
-                                            'Predictive Parity': predictive_parity
-                                            },
-                                    y_true=df[target],
-                                    y_pred=df[prediction],
-                                    sensitive_features=df[col_name])
+                with st.expander('Details', expanded=True):
+                    for model_name in model_name_list:
+                        st.markdown('- ' + model_name)
+                        grouped_metric = flm.MetricFrame(metrics={'N': flm.count,
+                                                    'Accuracy': skm.accuracy_score,
+                                                    'Selection Rate': flm.selection_rate,
+                                                    'True Positive Rate': flm.true_positive_rate,
+                                                    'False Positive Rate': flm.false_positive_rate,
+                                                    'Predictive Parity': predictive_parity
+                                                    },
+                                            y_true=df[target],
+                                            y_pred=df[prediction],
+                                            sensitive_features=df[col_name])
 
-                results = grouped_metric.by_group
-                results.index.name = 'Subgroup'
-                st.table(results)
+                        results = grouped_metric.by_group
+                        results.index.name = 'Subgroup'
+                        st.table(results)
 
             with col2:
-                # TODO: Plot chart with actual values
-                losses = get_losses('accuracy')
-                disparities = get_disparities('accuracy')
-
-                fig = px.scatter(x=losses, y=disparities, labels={'x': 'accuracy', 'y': 'disparity'})
-                fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
+                x = overall_df[x_axis_metric]
+                y = overall_df[y_axis_metric]
+                fig = px.scatter(x=x, 
+                                 y=y, 
+                                 text=overall_df.index,
+                                 labels={'x': 'Accuracy', 'y': y_axis_metric})
+                fig.update_traces(textposition='top right')
+                fig.update_xaxes(range=[max([0, x.min() - 0.1]), 
+                                        min([1, x.max() + 0.1])])
+                fig.update_layout(height=350, margin=dict(l=0, r=0, t=0, b=0))
                 st.plotly_chart(fig,
                             use_container_width=True,
                             config={'responsive': False, 'displayModeBar': False})
-
-        # metric = 'accuracy' if dtype_dict[target] == 'categorical' else 'loss'
-        # col1, col2 = st.columns([0.7, 0.3])
-
-        # with col1:
-        #     st.subheader('Model Comparison: Disparity in Predictions')
-
-        #     xs = df.copy().drop(target, axis=1)
-        #     y = df[target]
-
-        #     # TODO: Run models to get predictions, and calculate disparity and loss
-        #     # xs_list = [xs]
-        #     # y_list = [y]
-        #     # models = []
-        #     # losses = calculate_losses(xs_list, y_list, models, metric)
-        #     # disparities = calculate_disparities(xs_list, y_list, models, metric)
-
-        #     losses = get_losses(metric)
-        #     disparities = get_disparities(metric)
-
-        #     fig = px.scatter(x=losses, y=disparities, labels={'x': metric, 'y': 'disparity'})
-        #     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
-        #     st.plotly_chart(fig,
-        #                    use_container_width=True,
-        #                    config={'responsive': False, 'displayModeBar': False})
-
-        # with col2:
+        
         #     st.subheader('How to read this chart')
         #     objective = 'high' if metric == 'accuracy' else 'low'
 
