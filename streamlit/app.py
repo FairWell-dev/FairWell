@@ -84,7 +84,7 @@ st.title('FairWell')
 
 # Pages
 if page.lower() == 'guide':
-    about = open('streamlit/about.md', 'r')
+    about = open('../README.md', 'r')
     st.markdown(about.read())
 elif page.lower() == 'feature exploration':
     features_page.render(sidebar_handler)

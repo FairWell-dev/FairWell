@@ -94,7 +94,7 @@ def plot_histogram(series):
 
 def render(sidebar_handler):
     # Sidebar
-    df_list, df = sidebar_handler('Dataset for Feature Exploration', ['csv'], ['data/final.csv'])
+    df_list, df = sidebar_handler('Dataset for Feature Exploration', ['csv'], ['../data/final.csv'])
     st.sidebar.title('Options')
 
     # Main
