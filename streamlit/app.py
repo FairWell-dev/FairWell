@@ -9,14 +9,14 @@ import model_bias_detection_page
 
 def read_csv_list(file_list, selected=None):
     if not selected:
-        selected = st.sidebar.selected("Select One (CSV)",
+        selected = st.sidebar.selectbox("Select One (CSV)",
             options=[file.name for file in file_list],
             index=0)
     df_list = []
     select_df = pd.DataFrame()
     for file_path in file_list:
         df = pd.read_csv(file_path)
-        df_list.appent(df)
+        df_list.append(df)
         if not isinstance(file_path, str):
             file_path = file_path.name
         if file_path == selected:
@@ -25,14 +25,14 @@ def read_csv_list(file_list, selected=None):
 
 def read_pth_list(file_list, selected=None): #TODO
     if not selected:
-        selected = st.sidebar.selected("Select One (PTH)",
+        selected = st.sidebar.selectbox("Select One (PTH)",
             options=[file.name for file in file_list],
             index=0)
     model = []
     select_model = 'placeholder'
     for file_path in file_list:
         # model = torch.load(file_path)
-        model_list.appent(df)
+        model_list.append(df)
         if not isinstance(file_path, str):
             file_path = file_path.name
         if file_path == selected:
@@ -58,8 +58,8 @@ def sidebar_handler(label, type_list, sample_file_paths):
         all_uploads, select_upload = read_csv_list(csv_files)
         if len(type_list) > 1:
             all_models, select_model = read_pth_list(pth_files)
-            all_uploads = (all_preds, all_models)
-            select_upload = (select_pred, select_model)
+            all_uploads = (all_uploads, all_models)
+            select_upload = (select_upload, select_model)
         return all_uploads, select_upload
     else:
         sample_csv_files = [file for file in sample_file_paths if file.endswith('.csv')]
@@ -87,10 +87,10 @@ if page.lower() == 'guide':
     about = open('streamlit/about.md', 'r')
     st.markdown(about.read())
 elif page.lower() == 'feature exploration':
-    features_page.render(extract_data)
+    features_page.render(sidebar_handler)
 elif page.lower() == 'data fairness assessment':
-    data_fairness_page.render(extract_data)
+    data_fairness_page.render(sidebar_handler)
 elif page.lower() == 'model bias detection':
-    model_bias_detection_page.render(extract_data)
+    model_bias_detection_page.render(sidebar_handler)
 else:
     st.text('Page ' + page + ' is not implemented.')
