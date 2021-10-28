@@ -10,11 +10,13 @@ def infer_dtypes(df):
     for col_name in df.columns:
         series = df[col_name]
         dtype_dict[col_name] = 'categorical'
+        nunique = df[col_name].nunique()
 
-        if not pd.api.types.is_bool_dtype(series) and \
-            pd.api.types.is_numeric_dtype(series): # Boolean type should be categorical instead of numeric
+        if nunique > 10 and \
+            not pd.api.types.is_bool_dtype(series) and \
+            pd.api.types.is_numeric_dtype(series):
             dtype_dict[col_name] = 'numerical'
-
+    
     return dtype_dict
 
 @st.cache
