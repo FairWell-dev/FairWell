@@ -4,20 +4,15 @@ import plotly.graph_objects as go
 import streamlit as st
 
 
-def render(extract_data):
-    df = extract_data('csv')
+def render(sidebar_handler):
+    # Sidebar
+    df_list, df = sidebar_handler('Training Dataset(s) for Fairness Exploration', ['csv'], ['data/final.csv', 'data/final_copy.csv'])
     st.sidebar.title('Options')
     dataset = st.sidebar.selectbox('Fairness Metrics', 
                                options=['Class Imbalance (CI)', 'Jensen-Shannon Divergence (JS)'],
-                               index=0) 
-
-    # Extract data
-    try:
-        df = pd.read_csv("data/final.csv")
-    except:
-        st.error('Example dataset file not found, please upload dataset.')
-        st.sidebar.error('Example dataset file not found, please upload dataset.')
-        df = pd.read_csv(file)
+                               index=0)
     
     # Main
     st.subheader("Faireness Assessment on Training Data")
+    st.subheader('Data Sample (5 rows)')
+    st.dataframe(df.sample(5))

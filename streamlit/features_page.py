@@ -92,20 +92,22 @@ def plot_histogram(series):
 
     return fig
 
-def render(extract_data):
-    df = extract_data('csv')
+def render(sidebar_handler):
+    # Sidebar
+    df_list, df = sidebar_handler('Dataset for Feature Exploration', ['csv'], ['data/final.csv'])
     st.sidebar.title('Options')
+
     # Main
-    col1, col2 = st.columns([0.6, 0.4])
+    # col1, col2 = st.columns([0.6, 0.4])
 
-    with col1:
-        st.subheader('Data Sample (100 rows)')
-        st.dataframe(df.sample(100))
+    # with col1:
+    st.subheader('Data Sample (100 rows)')
+    st.dataframe(df.sample(100))
 
-    with col2:
-        st.subheader('Inferred Data Types')
-        dtype_dict = infer_dtypes(df)
-        st.json(dtype_dict)
+    # with col2:
+        # st.subheader('Inferred Data Types')
+    dtype_dict = infer_dtypes(df)
+        # st.json(dtype_dict)
 
     numerical_cols_width_prop = 0.5
     numerical_col, categorical_col = st.columns([

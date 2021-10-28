@@ -28,12 +28,19 @@ def get_disparities(metric):
     # TODO: Implement actual diaparities calculations
     return [0.16, 0.119, 0.066, 0.022, 0.003, 0.01]
 
-def render(extract_data):
+def render(sidebar_handler):
     # Sidebar
-    st.sidebar.title('Upload')
-    file = st.sidebar.file_uploader('Upload Model (PTH)', type=['pth']) 
+    all_data_models, selected = sidebar_handler('Training Dataset(s) and Model(s) for Bias Detection', 
+                                                ['csv', 'pth'], 
+                                                ['data/final.csv', 'data/final_copy.csv']) # sample files will be csv with predicted labels
     
-    df = extract_data('csv')
+    # Unpack values
+    if isinstance(selected, tuple):
+        df, model = selected
+        df_list, model_list = all_data_models
+    else:
+        df = selected
+        df_list = all_data_models
 
     # Main
     st.subheader("Bias Detection on Trained Model")
