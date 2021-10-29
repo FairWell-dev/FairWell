@@ -46,6 +46,10 @@ def categorical_cols_summary_stats(df, categorical_col_names):
     if len(categorical_col_names) == 0:
         return pd.DataFrame()
 
+    df = df.copy()
+    for col in categorical_col_names:
+        df[col] = df[col].astype('category')
+
     return df.loc[:, categorical_col_names] \
         .describe(include='all') \
         .transpose()
