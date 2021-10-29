@@ -74,14 +74,18 @@ def render(sidebar_handler):
     col1, col2 = st.columns(2)
 
     with col1:
-        target = st.selectbox('Target feature (categorical)', options=[col for col in df.columns
-                                                         if (dtype_dict[col] == 'categorical')])
+        target = st.selectbox('Target feature (categorical)', 
+                              options=[col for col in df.columns
+                                       if (dtype_dict[col] == 'categorical')])
 
         prediction = target + '_prediction'
 
-        cols_to_eval = st.multiselect('Categorical features to evaluate for fairness', 
-                                  options=[col for col in df.columns 
-                                  if (col not in [target, prediction]) and (dtype_dict[col] == 'categorical')])
+        cols_to_eval = st.multiselect('Categorical features to evaluate for fairness \
+                                      (features with >10 subgroups will not be shown)', 
+                                      options=[col for col in df.columns 
+                                               if (col not in [target, prediction]) and \
+                                                   (dtype_dict[col] == 'categorical') and \
+                                                   (df[col].nunique() <= 10)])
 
         x_axis_metric = 'Accuracy'
         y_axis_metric = st.radio('Metric to plot (y-axis)', 
@@ -105,12 +109,6 @@ def render(sidebar_handler):
 
         for col_name in cols_to_eval:
             st.markdown('##### ' + col_name.replace('_', ' '))
-
-            nunique = df[col_name].nunique()
-            if nunique > 10:
-                st.text(col_name + ' has too many subgroups (' + str(nunique) + '). Metrics and comparisons will not be run.')
-                continue
-
             col1, col2 = st.columns([0.6, 0.4])
 
             with col1:
@@ -136,9 +134,8 @@ def render(sidebar_handler):
                 }, index=model_name_list)
                 st.table(overall_df)
 
-                with st.expander('Details', expanded=True):
-                    for model_name in model_name_list:
-                        st.markdown('- ' + model_name)
+                for model_name in model_name_list:
+                    with st.expander('Details: ' + model_name, expanded=True):
                         grouped_metric = flm.MetricFrame(metrics={'N': flm.count,
                                                     'Accuracy': skm.accuracy_score,
                                                     'Selection Rate': flm.selection_rate,
@@ -168,6 +165,9 @@ def render(sidebar_handler):
                 st.plotly_chart(fig,
                             use_container_width=True,
                             config={'responsive': False, 'displayModeBar': False})
+
+            with st.expander('Insights'):
+                st.text("Really insightful stuff")
         
         #     st.subheader('How to read this chart')
         #     objective = 'high' if metric == 'accuracy' else 'low'
