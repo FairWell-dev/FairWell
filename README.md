@@ -1,8 +1,12 @@
-# uwu
+# FairWell
 
-## Research on Responsible AI
+## Introduction
 
-### Reponsible AI Reseach in Businesses
+FairWell is a Responsible AI tool developed using Streamlit. In this report, research on Responsible AI is presented, followed by elaborating on the FairWell tool. Lastly, a use case on how Responsible AI can be used to evaluate a model is shown, where the New York City (NYC) Subway dataset is used to model a binary classification problem on high/low traffic.
+
+## Responsible AI Research
+
+### Responsible AI in Businesses
 
 Businesses have recognised the need to develop AI models that are responsible and fair towards their data inputs. 
 
@@ -22,6 +26,7 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 - Accountability & Governance
 
 ### Fairness Metrics
+
 The problem of defining and addressing fairness has been a topic of increasing importance in the recent years, especially with work surrounding machine learning. Multiple definitions of fairness have been raised, each having their own pros and cons. This work does not aim to propose a single notion of fairness but rather we aim to (i) provide tools on how to measure and assess fairness and (ii) how to mitigate bias in models where necessary. Furthermore with respect to (ii), bias removing techniques can be broadly catergorised into pre-processing on data, in-processing by imposing constraints during training and post-processing where the results of the models are modified. (https://arxiv.org/pdf/2106.00467.pdf) This work takes the approach of the in-processing technique. 
 
 Generally, fairness definitions can be categorised into 4 areas, (i) individual, (ii) group, (iii) per group performance (https://arxiv.org/pdf/2006.13114.pdf).
@@ -31,6 +36,18 @@ Generally, fairness definitions can be categorised into 4 areas, (i) individual,
 **Group Fairness.** Group fairness as the term suggests, focuses on reducing bias for a group of individuals. It is believed that different groups of people are being unfairly treated and thus aims to attain fairness for each respective group. Some popular definitions of group fairness include but not limited to Demographic Parity, Equal Oportunity, etc. (https://arxiv.org/pdf/2006.13114.pdf)
 
 **Per Group Performance Fairness.** Another school of thought for fairness is the idea of per group performance. This school of thought attempts to maximise the utility of an individual group to attain fairness. Examples include Pareto-fairness and Rawlsian Max-Min fairness. (https://arxiv.org/pdf/2006.13114.pdf)
+
+## FairWell
+
+### Tools and Technologies Used
+
+### Features Explorer
+
+### Fairness Assessment (Data)
+
+### Fairness Assessment (Model Predictions) and Mitigation Recommendations
+
+- Only works for binary classification
 
 ## Dataset: New York City (NYC) Subway Traffic
 
@@ -47,6 +64,10 @@ Alternatively, businesses such as the real estate and media industries can benef
 ### Approach
 
 The baseline model is built for a time series binary classification problem to predict whether subway traffic is high or low.
+
+### Pipeline Overview
+
+![](./images/Pipeline%20Overview.png)
 
 ### Data preprocessing
 
@@ -123,7 +144,7 @@ Lastly, we merged the two datasets together. Our final dataset contains the foll
 | Severely rent-burdened households		  | Rental vacancy rate		  | 
 | Mean travel time to work (minutes)		  | Area (in sq miles)		  | 
 
-
+## Conclusion and Future Work
 
 ## References
 
