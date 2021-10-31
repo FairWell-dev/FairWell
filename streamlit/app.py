@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import streamlit as st
 import seaborn as sns
@@ -19,27 +20,20 @@ def read_csv_list(file_list, selected=None):
         df = pd.read_csv(file_path)
         if not isinstance(file_path, str):
             file_path = file_path.name
-        df_dict[file_path] = df
+        key = os.path.basename(file_path)[:-4]
+        df_dict[key] = df
         if file_path == selected:
-            select_key = file_path
+            select_key = key
     return df_dict, select_key
 
-def read_pth_list(file_list, selected=None): #TODO
-    # Loads list of filepaths into list of models
-    if not selected:
-        selected = st.sidebar.selectbox("Select One (PTH)",
-            options=[file.name for file in file_list],
-            index=0)
-    model_dict = {}
-    select_key = None
-    for file_path in file_list:
-        model = torch.load(file_path)
-        if not isinstance(file_path, str):
-            file_path = file_path.name
-        model_dict[file_path] = model
-        if file_path == selected:
-            select_key = file_path
-    return model_dict, select_key
+# def run_inference(file_list, df_dict): #TODO
+    # Loads list of models, runs inference and returns predictions
+    # pred_dict = {}
+    # select_key = None
+    # for file_path in file_list:
+    #     TODO: Add model loading and inference code
+    #     pred_dict[file_path] = pred_df
+    # return pred_dict, select_key
 
 def sidebar_handler(label, type_list, eg_dict):
     eg_labels = eg_dict.keys()
@@ -60,16 +54,14 @@ def sidebar_handler(label, type_list, eg_dict):
         csv_files = [file for file in file_list if file.type in ['text/csv', 'application/vnd.ms-excel']]
         pth_files = [file for file in file_list if file.type in ['application/octet-stream']] #TODO
         upload_dict = dict(zip(list(range(len(file_list))),file_list))
-        all_uploads, select_upload = read_csv_list(csv_files)
+        df_dict, select_key = read_csv_list(csv_files)
         # TODO: Model Upload feature
         # if len(type_list) > 1:
-            # all_models, select_model = read_pth_list(pth_files)
-            # all_uploads = (all_uploads, all_models)
-            # select_upload = (select_upload, select_model)
-        return all_uploads, select_upload
+            # Run Inference
+            # return run_inference(models, df_dict)
+        return df_dict, select_key
     else:
-        eg_file_paths = eg_dict.values()
-        return read_csv_list(eg_file_paths, eg_dict[selected_eg])
+        return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
 
 # Config 
 st.set_page_config(page_title='FairWell', 

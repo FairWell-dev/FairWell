@@ -48,22 +48,12 @@ def render(sidebar_handler):
         'Bias Mitigated Model - AIF360': 'data/test_pred_mitigation_aif360_20211031.csv'
     }
 
-    all_data_models, selected = sidebar_handler('Test Dataset(s) and Model(s) for Bias Detection', 
+    pred_df_dict, selected = sidebar_handler('Test Dataset(s) and Model(s) for Bias Detection', 
                                                 ['csv', 'pt'], 
                                                 eg_dict)
-    
-    # Unpack values
-    if isinstance(selected, tuple):
-        df_dict, model_dict = all_data_models
-        df = df_dict[selected[0]]
-        model = model_dict[selected]
-        model_name_list = model_dict.keys()
-    else:
-        df_dict = all_data_models
-        df = df_dict[selected]
-        model_name_list = eg_dict.keys()
+    df = pred_df_dict[selected]
+    model_name_list = eg_dict.keys()
         
-
     dtype_dict = infer_dtypes(df)
 
     # Main
