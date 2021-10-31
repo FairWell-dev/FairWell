@@ -21,7 +21,7 @@ The first step to mitigating bias is measuring. In this work, we look at identif
 
 #### Fairness Metrics (Data)
 
-The quality of data used will heavily influence the performance and fairness of the model. Therefore, identify bias in the training data is an important step in weeding out potential biases. However, this assumes that historical bias and discrimination are not the root cause of bias in the data. Nonetheless, several model-independent metrics can be used to inform the user about presence of bias. Examples include but not limited to class imbalance, Jensen-Shannon divergence, etc. <sup>1</sup>
+The quality of data used will heavily influence the performance and fairness of the model. Therefore, identifying bias in the training data is an important step in weeding out potential biases. However, this assumes that historical bias and discrimination are not the root cause of bias in the data. Nonetheless, several model-independent metrics can be used to inform the user about the presence of bias and efforts can be made to reduce skewed data distributions. Examples include but not limited to class imbalance, Jensen-Shannon divergence, etc. <sup>1</sup>
 
 #### Fairness Metrics (Predictions)
 
