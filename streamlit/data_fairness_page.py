@@ -47,11 +47,19 @@ def get_ci(class_cnt, pair):
     return ci
 
 @st.cache
-def get_metric(df, col):
+def get_class_summary(target, df, col):
+    class_cnt = df[col].value_counts()
+    class_p_cnt = df[df[target].isin([df[target].unique()[1]])][col].value_counts()
+
+    return class_cnt, class_p_cnt
+
+@st.cache
+def get_metric(target, df, col):
     col_score_list = list()
     class_cnt = df[col].value_counts()
     class_comb = combinations(class_cnt.index,2)
-    class_p_cnt = df[df['binary_target'].isin([1])][col].value_counts()
+    class_p_cnt = df[df[target].isin([df[target].unique()[1]])][col].value_counts()
+
     for pair in class_comb:
         tmp = {'pair':str(pair)}
 
@@ -74,8 +82,6 @@ def render(sidebar_handler):
     # Main
     st.subheader("Fairness Assessment on Training Data")
 
-    df_name_list = ['Dataset 1', 'Dataset 2']
-
     # Config
     col1, col2 = st.columns(2)
 
@@ -97,13 +103,13 @@ def render(sidebar_handler):
             eval_cols = container.multiselect('Features to evaluate (select one or more)',
                                             col_to_select)
 
-        metric_to_show = st.radio('Metric', 
+        metric_to_show = st.radio('Metric to plot (y axis)', 
                 options=['Class Imbalance', 'Jensen-Shannon Divergence'])
 
         run_comparison = st.button('Run Fairness Assessment')
 
     with col2:
-        with st.expander('Show subgroups (unique values) of selected features to evaluate'):
+        with st.expander('Show subgroups (unique values) of selected features to evaluate', expanded=True):
             unique_vals_dict = dict()
             for col in eval_cols:
                 unique_vals_dict[col] = str(df[col].unique().tolist())
@@ -126,21 +132,32 @@ def render(sidebar_handler):
             col1, col2 = st.columns([0.6, 0.4])
 
             with col1:
-                metric_df = pd.DataFrame(get_metric(df,col))
-                max_metric_df = pd.DataFrame({
-                    'Max Class Imbalance': metric_df['Class Imbalance'].max(),
-                    'Max Jensen-Shannon Divergence': metric_df['Jensen-Shannon Divergence'].max()
-                    }, index=['Dataset 1'])
-                st.table(max_metric_df)
-
+                container = st.container()
+                max_metric_df = pd.DataFrame(columns=['Max Class Imbalance', 'Max Jensen-Shannon Divergence'])
                 overall_df=pd.DataFrame(columns=['pair', 'Class Imbalance', 'Jensen-Shannon Divergence','dataset'])
                 for df_name in dataset_dict.keys():
+                    df_tmp = dataset_dict[df_name]
+                    dataset_metric_df = pd.DataFrame(get_metric(target, df_tmp, col))
+                    max_metric_df = max_metric_df.append(pd.DataFrame({
+                        'Max Class Imbalance': dataset_metric_df['Class Imbalance'].max(),
+                        'Max Jensen-Shannon Divergence': dataset_metric_df['Jensen-Shannon Divergence'].max()
+                        }, index=[df_name]))
+
                     with st.expander('Details: ' + df_name, expanded=False):
-                        dataset_metric_df = pd.DataFrame(get_metric(dataset_dict[df_name],col))
+                        st.caption('Subgroup details')
+                        class_details = pd.concat(get_class_summary(target, df_tmp, col), axis=1)
+                        class_details.columns = ['N', 'N_label_{}'.format(df_tmp[target].unique()[1])]
+                        class_details['Label_probability'] = class_details['N_label_{}'.format(df_tmp[target].unique()[1])]/class_details['N']
+                        st.table(class_details)
+
+                        st.caption('Metrics details')
                         dataset_metric_df['dataset']=df_name
                         overall_df = overall_df.append(dataset_metric_df)
                         dataset_metric_df.drop(columns=['dataset'], inplace=True)
                         st.table(dataset_metric_df.set_index('pair'))
+
+                container.table(max_metric_df)
+
 
             with col2:
                 x = overall_df['pair']
