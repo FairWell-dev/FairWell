@@ -76,8 +76,14 @@ def get_metric(target, df, col):
     return col_score_list
 
 def render(sidebar_handler):
+    eg_dict = {
+        'Baseline Dataset': 'data/raw_20211028.csv',
+        'Bias Mitigated - AIF360 Dataset': 'data/mitigation_aif360_20211031.csv'
+    }
+
     # Sidebar
-    dataset_dict, df = sidebar_handler('Training Dataset(s) for Fairness Exploration', ['csv'], ['data/final.csv'])
+    dataset_dict, select_key = sidebar_handler('Training Dataset(s) for Fairness Assessment', ['csv'], eg_dict)
+    df = dataset_dict[select_key]
 
     # Main
     st.subheader("Fairness Assessment on Training Data")
