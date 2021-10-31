@@ -1,7 +1,9 @@
 import fairlearn.metrics as flm
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import seaborn as sns
 import sklearn.metrics as skm
 import streamlit as st
 
@@ -20,17 +22,6 @@ def infer_dtypes(df):
             dtype_dict[col_name] = 'numerical'
     
     return dtype_dict
-
-@st.cache
-def get_losses(metric):
-    # TODO: Implement actual loss calculations
-    losses = [0.84, 0.834, 0.827, 0.793, 0.783, 0.772]
-    return losses if metric == 'accuracy' else losses[::-1]
-
-@st.cache
-def get_disparities(metric):
-    # TODO: Implement actual diaparities calculations
-    return [0.16, 0.119, 0.066, 0.022, 0.003, 0.01]
 
 def predictive_parity(y_true, y_pred):
     if y_pred.sum() == 0:
@@ -99,13 +90,38 @@ def render(sidebar_handler):
             for col in cols_to_eval:
                 unique_vals_dict[col] = str(np.sort(df[col].unique()).tolist())
             st.json(unique_vals_dict)
+        with st.expander('How to interpret the scatter plot', expanded=True):
+            read_chart_description = """
+                The scatter plot represents each model as a point. 
+                The x-axis represents accuracy (the higher the better). 
+                The y_axis represents disparity (the lower the fairer).
+            """
+            st.markdown(read_chart_description)
 
     if df[target].nunique() > 2:
             run_comparison = False
             st.write('Not implemented: Target variable ' + target + ' has more than 2 unique values, fairness metrics cannot be calculated.')
 
     if run_comparison:
-        st.subheader('Fairness Assessment and Model Comparison')
+        st.subheader('Overall Model Performance')
+        for model_name in model_name_list:
+            with st.expander('Model Performance: ' + model_name):
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    st.markdown('##### Classification Report')
+                    report = skm.classification_report(df[target], df[prediction], output_dict=True)
+                    report_df = pd.DataFrame(report).transpose()
+                    st.table(report_df)
+
+                with col2:
+                    st.markdown('##### Confusion Matrix')
+                    confusion_matrix = skm.confusion_matrix(df[target], df[prediction], labels=[0, 1])
+                    confusion_matrix_df = pd.DataFrame(confusion_matrix, columns=['0 (Predicted)', '1 (Predicted)'], index=['0 (Actual)', '1 (Actual)'])
+                    colour_map = sns.light_palette('lightblue', as_cmap=True)
+                    st.dataframe(confusion_matrix_df.style.background_gradient(cmap=colour_map), width=500)
+
+        st.subheader('Fairness Assessment and Model Comparison (per Feature)')
 
         for col_name in cols_to_eval:
             st.markdown('##### ' + col_name.replace('_', ' '))
@@ -129,7 +145,7 @@ def render(sidebar_handler):
                 overall_df = pd.DataFrame({
                     'Accuracy': [acc],
                     'Demographic Parity': [dpd],
-                    'Equalised Odds': [eod],
+                    'Equalized Odds': [eod],
                     'Predictive Parity': [ppd]
                 }, index=model_name_list)
                 st.table(overall_df)
@@ -167,32 +183,31 @@ def render(sidebar_handler):
                             config={'responsive': False, 'displayModeBar': False})
 
             with st.expander('Insights'):
-                st.text("Really insightful stuff")
-        
-        #     st.subheader('How to read this chart')
-        #     objective = 'high' if metric == 'accuracy' else 'low'
+                insights_description = """
+                    Accuracy ranges from {}% to {}%, while disparity ranges from {}% to {}%. \n
+                    The model with the highest accuracy ({}%) has a disparity of {}%. \n
+                    The least disparate model achieves an accuracy of {}% with a disparity of {}%.
+                """
 
-        #     read_chart_description = """
-        #         This chart represents each model as a point.\n
-        #         The x-axis represents {} (the {}er the better).\n
-        #         The y_axis represents disparity (the lower the fairer).
-        #     """
-        #     st.write(read_chart_description.format(metric, objective))
+                losses = overall_df[x_axis_metric]
+                min_loss = '{:.2f}'.format(min(losses))
+                max_loss = '{:.2f}'.format(max(losses))
 
-        #     st.subheader('Insights')
-        #     insights_description = """
-        #         {} ranges from {}% to {}%, while disparity ranges from {}% to {}%.
+                disparities = overall_df[y_axis_metric]
+                min_disparity = '{:.2f}'.format(min(disparities))
+                max_disparity = '{:.2f}'.format(max(disparities))
 
-        #         The model with the {} {} achieves an {} of {}% with a disparity of {}%.
+                metric_argmax = np.argmax(losses)
+                highest_acc = '{:.2f}'.format(losses[metric_argmax])
+                highest_acc_disparity = '{:.2f}'.format(disparities[metric_argmax])
 
-        #         The least-disparity model achieves an {} of {}% with a disparity of {}%.
-        #     """
-
-        #     metric_argmax = np.argmax(losses)
-        #     disparity_argmax = np.argmax(disparities)
-        #     st.write(insights_description.format(metric.title(), min(losses), max(losses), min(disparities), max(disparities),
-        #                                          objective + 'est', metric, metric, losses[metric_argmax], disparities[disparity_argmax],
-        #                                          metric, losses[metric_argmax], disparities[disparity_argmax]))
+                disparity_argmin = np.argmin(disparities)
+                lowest_disparity = '{:.2f}'.format(disparities[disparity_argmin])
+                lowest_disparity_acc = '{:.2f}'.format(losses[disparity_argmin])
+                
+                st.markdown(insights_description.format(min_loss, max_loss, min_disparity, max_disparity,
+                                                     highest_acc, highest_acc_disparity,
+                                                     lowest_disparity, lowest_disparity_acc))
 
 
     st.subheader("Recommended Bias Mitigation Techniques")
