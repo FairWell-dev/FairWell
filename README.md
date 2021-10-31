@@ -6,6 +6,35 @@ FairWell is a Responsible AI tool developed using Streamlit. In this report, res
 
 ## Responsible AI Research
 
+The problem of defining and addressing fairness has been a topic of increasing importance in the recent years. Especially with work surrounding machine learning. Multiple definitions of fairness have been raised, each having their own pros and cons. This work does not aim to propose a single notion of fairness but rather we aim to (i) provide tools on how to measure and assess fairness and (ii) how to mitigate bias in models where necessary. Our work can be summarised as below:
+
+1. Fairness assesment<sup>1, 12, 13</sup>
+   1. On data
+   2. On model predictions
+2. Bias mitigation<sup>12</sup>
+   1. Pre-processing by transforming the data 
+   2. In-processing by imposing constraints during training
+   3. Post-processing where the predictions of models are modified
+
+### Fairness Metrics
+The first step to mitigating bias is measuring. In this work, we look at identifying the presence of bias in 2 locations: (i) bias in the data and (ii) bias in the predictions.
+
+#### Fairness Metrics (Data)
+
+The quality of data used will heavily influence the performance and fairness of the model. Therefore, identify bias in the training data is an important step in weeding out potential biases. However, this assumes that historical bias and discrimination are not the root cause of bias in the data. Nonetheless, several model-independent metrics can be used to inform the user about presence of bias. Examples include but not limited to class imbalance, Jensen-Shannon divergence, etc. <sup>1</sup>
+
+#### Fairness Metrics (Predictions)
+
+More commonly, we identify bias based on decisions (i.e. predicitions) made by the model after training (and bias mitigation). Generally, fairness decision definitions can be categorised into 4 areas, (i) individual, (ii) group, (iii) per group performance and (iv) causality based criteria.<sup>13</sup>
+
+- **Individual Fairness.** Fairness definitions at the individual level focuses on the relative similarity between individuals. Therefore, similar individuals should be treated similarly with similar decisions.<sup>12, 13</sup>
+
+- **Group Fairness.** Group fairness as the term suggests, focuses on reducing bias for a group of individuals. It is believed that different groups of people are being unfairly treated and thus aims to attain fairness for each respective group.<sup>13</sup> Some popular definitions of group fairness include but not limited to demographic parity, Equal oportunity, predictive parity, etc.<sup>14</sup>
+
+- **Per Group Performance Fairness.** Another school of thought for fairness is the idea of per group performance. This school of thought attempts to maximise the utility of an individual group to attain fairness.<sup>13</sup> Examples include Pareto-fairness<sup>15</sup> and Rawlsian Max-Min fairness<sup>16</sup>.
+
+- **Causality Based Citeria.** These notions of fairness is distinct from the previous 3 definitions that are based on observational results. Causality based citeria, attempts to create connections amongst related variables to derive causal relationship of the problem. The relationship obtain can then be used to answer counter factual questions such as “what would have been the decision if that individual had a different gender?”.<sup>13</sup>
+
 ### Responsible AI in Businesses
 
 Businesses have recognised the need to develop AI models that are responsible and fair towards their data inputs. 
@@ -25,27 +54,13 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 - Transparency & Control
 - Accountability & Governance
 
-### Fairness Metrics
-
-The problem of defining and addressing fairness has been a topic of increasing importance in the recent years, especially with work surrounding machine learning. Multiple definitions of fairness have been raised, each having their own pros and cons. This work does not aim to propose a single notion of fairness but rather we aim to (i) provide tools on how to measure and assess fairness and (ii) how to mitigate bias in models where necessary. Furthermore with respect to (ii), bias removing techniques can be broadly catergorised into pre-processing on data, in-processing by imposing constraints during training and post-processing where the results of the models are modified.<sup>12</sup> This work takes the approach of the in-processing technique. 
-
-Generally, fairness definitions can be categorised into 4 areas, (i) individual, (ii) group, (iii) per group performance and (iv) causality based criteria.<sup>13</sup>
-
-- **Individual Fairness.** Fairness definitions at the individual level focuses on the relative similarity between individuals. Therefore, similar individuals should be treated similarly with similar decisions.<sup>12, 13</sup>
-
-- **Group Fairness.** Group fairness as the term suggests, focuses on reducing bias for a group of individuals. It is believed that different groups of people are being unfairly treated and thus aims to attain fairness for each respective group.<sup>13</sup> Some popular definitions of group fairness include but not limited to demographic parity, Equal oportunity, predictive parity, etc.<sup>14</sup>
-
-- **Per Group Performance Fairness.** Another school of thought for fairness is the idea of per group performance. This school of thought attempts to maximise the utility of an individual group to attain fairness. Examples include Pareto-fairness and Rawlsian Max-Min fairness.<sup>13</sup>
-
-- **Causality Based Citeria.** These notions of fairness is distinct from the previous 3 definitions that are based on observational results. Causality based citeria, attempts to create connections amongst related variables to derive causal relationship of the problem. The relationship obtain can then be used to answer counter factual questions such as “what would have been the decision if that individual had a different gender?”.<sup>13</sup>
-
-
 ## FairWell
 
 ### Tools and Technologies Used
 
 - <img src="https://streamlit.io/images/brand/streamlit-mark-color.png" width="20"/> [Streamlit](https://streamlit.io/)
 - [Microsoft Fairlearn](https://fairlearn.org/)
+- [AI Fairness 360](https://aif360.mybluemix.net/)
 - Data Science packages (NumPy, Pandas, Plotly)
 
 ### Features Explorer
@@ -181,8 +196,8 @@ Lastly, we merged the two datasets together. Our final dataset contains the foll
 12. [The zoo of Fairness metrics in Machine Learning](https://arxiv.org/pdf/2106.00467.pdf)
 13. [Fairness without Demographics through Adversarially Reweighted Learning](https://arxiv.org/pdf/2006.13114.pdf)
 14. [Fairness and Machine Learning](http://www.fairmlbook.org)
-
-
+15. [Pareto-Efficient Fairness for Skewed Subgroup Data](https://aiforsocialgood.github.io/icml2019/accepted/track1/pdfs/24_aisg_icml2019.pdf)
+16. [The Price of Fairness](https://core.ac.uk/download/pdf/4429576.pdf)
 ## Acknowledgements
 
 Thanks to our friends at Mastercard (Apurva, Bharathi, Hui Chiang, Idaly and Louis) for their advice and guidance on AI fairness.
