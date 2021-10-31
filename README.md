@@ -73,7 +73,7 @@ The features explorer page allows users to quickly view the distributions of the
 
 With a model, users can easily assess the fairness of their model's predictions with regard to the input dataset. The aim is to allow for identifying bias from the model after it is trained. Coupled with the previous page on fairness assessment on the data, users can identify if the source of bias comes from the data or model, or both.
 
-Users will first select the target feature from the dataset, along with the features they would like to evaluate for fairness. The inference process will then kick off for every model, returning predictions as outputs. With both the ground truth (target) and the predictions, the following fairness metrics will be calculated:
+Users will first select the target feature from the dataset, along with the features they would like to evaluate for fairness. The inference process will then kick off for every model, returning predictions as outputs. With both the ground truth (target) and the predictions, each model's performance will be calculated, along the following fairness metrics for every feature:
 
 - Demographic Parity (DP): Measures the same positive prediction ratio across groups identified by the sensitive features.
 - Equalized Odds (EO): Measures the equality in terms of error rate. Same false positive rate and false negative rate across sensitive groups identified.
