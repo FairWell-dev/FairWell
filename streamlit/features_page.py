@@ -100,21 +100,27 @@ def plot_histogram(series):
 
 def render(sidebar_handler):
     # Sidebar
-    df_list, df = sidebar_handler('Dataset for Feature Exploration', ['csv'], ['../data/final.csv'])
-    st.sidebar.title('Options')
+    eg_dict = {
+        'Baseline Dataset': 'data/raw_20211028.csv',
+        'Bias Mitigated Dataset - AIF360': 'data/mitigation_aif360_20211031.csv'
+    }
+
+    df_dict, select_key = sidebar_handler('Dataset(s) for Feature Exploration', ['csv'], eg_dict)
+    df = df_dict[select_key]
 
     # Main
-    # col1, col2 = st.columns([0.6, 0.4])
+    col1, col2 = st.columns([0.6, 0.4])
 
-    # with col1:
-    st.subheader('Data Sample (100 rows)')
-    st.dataframe(df.sample(100))
+    with col1:
+        st.subheader('Data Sample (100 rows)')
+        st.dataframe(df.sample(100))
 
-    # with col2:
-        # st.subheader('Inferred Data Types')
-    dtype_dict = infer_dtypes(df)
-        # st.json(dtype_dict)
-
+    with col2:
+        st.subheader('Inferred Data Types')
+        with st.expander('Show All Inferred Data Types'):
+            dtype_dict = infer_dtypes(df)
+            st.json(dtype_dict)
+        
     numerical_cols_width_prop = 0.5
     numerical_col, categorical_col = st.columns([
           numerical_cols_width_prop, 
@@ -123,24 +129,57 @@ def render(sidebar_handler):
     
     with numerical_col:
         numerical_col_names = [col for col, dtype in dtype_dict.items() if dtype == 'numerical']
+        
+        # Load 5 Features
         num_num = len(numerical_col_names)
-        subset_numerical_col = numerical_col_names[0:num_num+1]
+        subset_numerical_col = numerical_col_names
         if num_num > 4:
             subset_numerical_col = numerical_col_names[0:5]
-        select_numerical_col = st.sidebar.multiselect('Numerical Features (' + str(len(numerical_col_names)) + ')', 
-                               options=numerical_col_names,
-                               default=subset_numerical_col) 
-        st.subheader('Numerical features (' + str(len(select_numerical_col)) + ')')
+
+        # Define Containers
+        num_h_ctnr = st.container()
+        num_sl_ctnr = st.container()
+
+        # Select All
+        num_all = st.checkbox("Select all %s Numerical Features" % num_num) 
+        if num_all:
+            select_numerical_col = num_sl_ctnr.multiselect('Select Numerical Features', 
+                                   options=numerical_col_names,
+                                   default=numerical_col_names) 
+        else:
+            select_numerical_col = num_sl_ctnr.multiselect('Select Numerical Features', 
+                                   options=numerical_col_names,
+                                   default=subset_numerical_col) 
+
+        # Add Subheader to Container
+        num_h_ctnr.subheader('Numerical features (' + str(len(select_numerical_col)) + ')')
+
     with categorical_col:
         categorical_col_names = [col for col, dtype in dtype_dict.items() if dtype == 'categorical']
+        
+        # Load 5 Features        
         num_cat = len(categorical_col_names)
         subset_categorical_cols = categorical_col_names[0:num_cat+1]
         if num_cat > 4:
             subset_categorical_cols = categorical_col_names[0:5]
-        select_categorical_col = st.sidebar.multiselect('Categorical Features (' + str(len(categorical_col_names)) + ')', 
-                                options=categorical_col_names,
-                                default=subset_categorical_cols) 
-        st.subheader('Categorical features (' + str(len(select_categorical_col)) + ')')
+
+        # Define Containers
+        cat_h_ctnr = st.container()
+        cat_sl_ctnr = st.container()
+
+        # Select All
+        cat_all = st.checkbox("Select all %s Categorical Features" % num_cat)
+        if cat_all:
+            select_categorical_col = cat_sl_ctnr.multiselect('Select Categorical Features', 
+                                   options=categorical_col_names,
+                                   default=categorical_col_names) 
+        else:
+            select_categorical_col = cat_sl_ctnr.multiselect('Select Categorical Features', 
+                                   options=categorical_col_names,
+                                   default=subset_categorical_cols) 
+
+        # Add Subheader to Container
+        cat_h_ctnr.subheader('Categorical features (' + str(len(select_categorical_col)) + ')')
 
     # Calculate summaries
     numerical_summary_df = numerical_cols_summary_stats(df, select_numerical_col)
