@@ -67,13 +67,13 @@ Lastly, the page will compare the aforementioned fairness metrics of each featur
 
 ## Dataset: New York City (NYC) Subway Traffic
 
-The dataset we selected consists of subway traffic in NYC, along with neighbourhood census data of the city. It is hosted on Kaggle by Edden, who has performed preprocessing steps to convert the raw data provided by The Metropolitan Transportation Authority (MTA), North America's largest transportation network. The census data is from NYU Furman Center's New York City Neighborhood Data Profiles and the neighborhood data is from University of Berkeley GeoData Library.
+The dataset we selected consists of subway traffic in NYC, along with neighborhood census data of the city. It is hosted on Kaggle by Edden, who has performed preprocessing steps to convert the raw data provided by The Metropolitan Transportation Authority (MTA), North America's largest transportation network. The census data is from NYU Furman Center's New York City Neighborhood Data Profiles and the neighborhood data is from University of Berkeley GeoData Library.
 
 ### Problem Statement
 
 Public transport has become a necessity in our modern landscape. Agencies are interested in capitilising on data on public transport usage such as subway traffic to inform their location based business decisions.
 
-Government entities involved in urban planning might utilise subway traffic conditions to determine neighbourhoods that could benefit from neighbourhood rejuvenation or to inform other land usage planning decisions.[^1] Governments can also benefit from having a gauge of how investing into a neighbourhood will affect traffic volume via subway in different areas through census data.
+Government entities involved in urban planning might utilise subway traffic conditions to determine neighborhoods that could benefit from neighborhood rejuvenation or to inform other land usage planning decisions.[^1] Governments can also benefit from having a gauge of how investing into a neighborhood will affect traffic volume via subway in different areas through census data.
 
 Alternatively, businesses such as the real estate and media industries can benefit from integrating subway traffic conditions as their decision making factors. Subway traffic can greatly affect real estate prices, thus this can inform real estate developers in their development strategies[^2]. With 1.7 billion turnstile swipe in 2019 alone, the subway is New York City's most popular mode of transit[^3], priming it to an effective mode of advertisement - a reason why subway advertising has become a regular part of every commuter's life. Subway traffic can also be used to inform media agencies of their audience, allowing them to identify prime locations - and thereby the corresponding bullet services - for their advertisement campaigns in order to maximise their effectiveness[^4].
 
@@ -87,9 +87,9 @@ The baseline model is built for a time series binary classification problem to p
 
 ### Data preprocessing
 
-#### Neighbourhood Census Data
+#### Neighborhood Census Data
 
-The neighbourhood census data of the city consisted of a total of 87 columns, out of which we selected 15 columns to be included in the final dataset. Of these 15 columns, none contained missing data points.
+The neighborhood census data of the city consisted of a total of 87 columns, out of which we selected 15 columns to be included in the final dataset. Of these 15 columns, none contained missing data points.
 
 * Neighborhood
 * Car-free commute (% of commuters)
@@ -109,24 +109,17 @@ The neighbourhood census data of the city consisted of a total of 87 columns, ou
 
 #### Subway Data
 
-As the neighbourhood census data was taken on June 2020, we selected 3 months worth of data from the subway data between Apr-Jun 2020, with the assumption that the neighbourhood census data stays constant for the 3 months. 
+As the neighborhood census data was taken on June 2020, we selected 3 months worth of data from the subway data between April to June 2020, with the assumption that the neighborhood census remain consistent for these 3 months.
 
-**Missing Values**
+Missing values: The Subway Dataset has the following columns with missing data. Upon further evaluation of these columns, we decided to drop these two columns.
 
-The Subway Dataset has the following columns with missing data. Upon further evaluation of these columns, we decided to drop these two columns.
-| Column Header  | Percentage Missing |
-| ------------- | ------------- |
-| North Direction Label	  | 3.198842  |
-| South Direction Label	  | 2.585992  |
+| Column                  | Missing (%)     |
+| ----------------------- | --------------- |
+| North Direction Label	  | 3.19            |
+| South Direction Label	  | 2.58            |
 
 
-**One Hot Encoding**
-
-One Hot Encoding was done for the following categorical columns: - "Division", "Structure", "Borough", "Connecting Lines", "Daytime Route". Upon performing One Hot Encoding on these, columns, we conducted a correlation analysis to check for high correlated columns that may result in the Curse of Dimensionality. We discovered that there was a high correlation between the "Connecting Lines" column and the "Daytime Route" column. As such, we dropped the "Daytime Route" column. 
-
-**Binary Target Variable**
-
-The current subway dataset has no clear target output. Hence, we want to aggregate the current 'Entry' and 'Exit' columns such that we can get a target binary column (EntriesExit) for our model. We combine the current 'Entry' and 'Exit' columns by summing them up to aggregate the total number of people passing through the station in each 4 hr interval. We then find the median number of people passing through all the neighbourhoods in each Datetime period. If EntriesExit value is greater than the median, we classify that it is crowded (1) and vice versa to get a target binary column. We chose to split the column by median to ensure that our target binary column would have a more uniform distribution and prevent imbalanced data.
+One Hot Encoding: One Hot Encoding was done for the following categorical columns: - "Division", "Structure", "Borough", "Connecting Lines", "Daytime Route". Upon performing One Hot Encoding on these, columns, we conducted a correlation analysis to check for high correlated columns that may result in the Curse of Dimensionality. We discovered that there was a high correlation between the "Connecting Lines" column and the "Daytime Route" column. As such, we dropped the "Daytime Route" column. 
 
 9 columns were then selected to be in the final dataset.
 * Datetime
@@ -135,30 +128,41 @@ The current subway dataset has no clear target output. Hence, we want to aggrega
 * Division
 * Structure
 * Borough
-* Neighbourhood
-* EntriesExit (Target Binary)
+* neighborhood
+* EntriesExit (Binary Target)
+
+Target Variable: The current subway dataset has no clear target output. Hence, we want to aggregate the current "Entry" and "Exit" columns such that we can get a target binary column (EntriesExit) to represent the total amount of traffic for every station. We combine the current "Entry" and "Exit" columns by summing them up to aggregate the total number of people passing through the station in each 4 hr interval. We then find the median number of people passing through all the neighborhoods in each Datetime period. If EntriesExit value is greater than the median, we classify that it is crowded (1) and vice versa (0) to derive a binary target. We chose to split the column by median to ensure that our target would have a uniform (balanced) distribution.
 
 ### Feature Engineering
 
-Feature Engineering was done on 2 columns: num_of_stations and Neighbourhood Area size. Num_of_stations was derived by grouping the subway data by neighbourhood to find the number of unique stations in each neighbourhood. Neighbourhood Area Size was derived from the original neighbourhood census data columns: Population and Population density (1000 persons per square mile).
+Feature Engineering was done on two columns: "Number of Stations" and "Neighborhood Area Size". "Number of Stations" is derived by grouping the subway data by neighborhood to find the number of unique stations in each neighborhood. "neighborhood Area Size" is derived from the original neighborhood census data columns: "Population" and "Population Density (1000 persons per square mile)".
 
 Lastly, we merged the two datasets together. Our final dataset contains the following features:
 
-| Features  | Features  |
-| ------------- | ------------- |
-| Neighbourhood	  | Percent Asian	  |
-| Datetime	  | Percent Hispanic	  | 
-| **EntriesExit**	  | Percent black	  | 
-| Division	  | Percent white	  | 
-| Structure	  | Population	  | 
-| Borough	  | Poverty rate	  | 
-| Car-free commute (% of commuters)	  | Public housing (% of rental units)	  | 
-| Disabled population		  | Unemployment rate	  | 
-| Foreign-born population	  | Residential units within 12 mile of a subway station		  | 
-| Median household income (2018$)	  | Population density (1,000 persons per square mile)		  | 
-| Median rent, all (2018$)	  | Serious crime rate (per 1,000 residents)		  | 
-| Severely rent-burdened households		  | Rental vacancy rate		  | 
-| Mean travel time to work (minutes)		  | Area (in sq miles)		  | 
+| Features from Neighborhood Census Data  | Features from Subway Data\* |
+| --------------------------------------- | -------------------------- |
+| Neighborhood<br>Car-free commute (% of commuters)\*\*\*<br>Disabled population<br>Foreign-born population<br>Median household income (2018$)<br>Median rent, all (2018$)<br>Percent Asian\*\*\*<br>Percent Hispanic\*\*\*<br>Percent Black\*\*\*<br>Percent white\*\*\*<br>Population\*\*\*\*<br>Poverty rate<br>Public housing (% of rental units)\*\*\*<br>Unemployment rate<br>Residential units within 12 mile of a subway station<br>Population density (1,000 persons per square mile)\*\*\*\*<br>Serious crime rate (per 1,000 residents)<br>Severely rent-burdened households<br>Rental vacancy rate<br>Mean travel time to work (minutes)| Datetime<br>Stop Name<br>Connecting Lines\*\*<br>Division\*\*<br>Structure\*\*<br>Borough\*\*<br>Neighborhood<br>Entries\*\*\*\*\*<br>Exits\*\*\*\*\* |
+
+\* Used to derive "Number of Stations" feature \
+\*\* One hot encoded features \
+\*\*\* Binned features \
+\*\*\*\* Used to derive ""Neighborhood Area Size"" feature \
+\*\*\*\*\* Used to derive "EntriesExits" target feature
+
+### Fairness Assessment on Dataset
+
+
+### Modelling with PyTorch
+
+
+### Fairness Assessment on Model Predictions
+
+
+### Fairness Mitigation
+
+
+### Effect of Mitigation Approach
+
 
 ## Conclusion and Future Work
 
