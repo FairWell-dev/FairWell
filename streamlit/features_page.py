@@ -116,7 +116,7 @@ def render(sidebar_handler):
         st.dataframe(df.sample(100))
 
     with col2:
-        st.subheader('Data Sample (100 rows)')
+        st.subheader('Inferred Data Types')
         with st.expander('Show All Inferred Data Types'):
             dtype_dict = infer_dtypes(df)
             st.json(dtype_dict)
@@ -129,14 +129,19 @@ def render(sidebar_handler):
     
     with numerical_col:
         numerical_col_names = [col for col, dtype in dtype_dict.items() if dtype == 'numerical']
+        
+        # Load 5 Features
         num_num = len(numerical_col_names)
         subset_numerical_col = numerical_col_names
         if num_num > 4:
             subset_numerical_col = numerical_col_names[0:5]
+
+        # Define Containers
         num_h_ctnr = st.container()
         num_sl_ctnr = st.container()
-        num_all = st.checkbox("Select all %s Numerical Features" % num_num)
-         
+
+        # Select All
+        num_all = st.checkbox("Select all %s Numerical Features" % num_num) 
         if num_all:
             select_numerical_col = num_sl_ctnr.multiselect('Select Numerical Features', 
                                    options=numerical_col_names,
@@ -145,17 +150,25 @@ def render(sidebar_handler):
             select_numerical_col = num_sl_ctnr.multiselect('Select Numerical Features', 
                                    options=numerical_col_names,
                                    default=subset_numerical_col) 
+
+        # Add Subheader to Container
         num_h_ctnr.subheader('Numerical features (' + str(len(select_numerical_col)) + ')')
+
     with categorical_col:
         categorical_col_names = [col for col, dtype in dtype_dict.items() if dtype == 'categorical']
+        
+        # Load 5 Features        
         num_cat = len(categorical_col_names)
         subset_categorical_cols = categorical_col_names[0:num_cat+1]
         if num_cat > 4:
             subset_categorical_cols = categorical_col_names[0:5]
+
+        # Define Containers
         cat_h_ctnr = st.container()
         cat_sl_ctnr = st.container()
+
+        # Select All
         cat_all = st.checkbox("Select all %s Categorical Features" % num_cat)
-         
         if cat_all:
             select_categorical_col = cat_sl_ctnr.multiselect('Select Categorical Features', 
                                    options=categorical_col_names,
@@ -164,6 +177,8 @@ def render(sidebar_handler):
             select_categorical_col = cat_sl_ctnr.multiselect('Select Categorical Features', 
                                    options=categorical_col_names,
                                    default=subset_categorical_cols) 
+
+        # Add Subheader to Container
         cat_h_ctnr.subheader('Categorical features (' + str(len(select_categorical_col)) + ')')
 
     # Calculate summaries
