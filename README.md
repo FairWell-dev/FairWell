@@ -41,13 +41,29 @@ Generally, fairness definitions can be categorised into 4 areas, (i) individual,
 
 ### Tools and Technologies Used
 
+- <img src="https://streamlit.io/images/brand/streamlit-mark-color.png" width="20"/> [Streamlit](https://streamlit.io/)
+- [Microsoft Fairlearn](https://fairlearn.org/)
+- Data Science packages (NumPy, Pandas, Plotly)
+
 ### Features Explorer
+
+The features explorer page allows users to quickly view the distributions of their dataset, as well as the summary statistics for each feature. An algorithm is created to quickly infer the data types of each feature, categorising them into either numerical or categorical. Based on the data type, a histogram or bar chart will be shown for numerical or categorical data type respectively.
 
 ### Fairness Assessment (Data)
 
 ### Fairness Assessment (Model Predictions) and Mitigation Recommendations
 
-- Only works for binary classification
+With a model, users can easily assess the fairness of their model's predictions with regard to the input dataset. The aim is to allow for identifying bias from the model after it is trained. Coupled with the previous page on fairness assessment on the data, users can identify if the source of bias comes from the data or model, or both.
+
+Users will first select the target feature from the dataset, along with the features they would like to evaluate for fairness. The inference process will then kick off for every model, returning predictions as outputs. With both the ground truth (target) and the predictions, the following fairness metrics will be calculated:
+
+- Demographic Parity (DP): Measures the same positive prediction ratio across groups identified by the sensitive features.
+- Equalized Odds (EO): Measures the equality in terms of error rate. Same false positive rate and false negative rate across sensitive groups identified.
+- Predictive Parity (PP): Measures the error rates in terms of fraction of errors over the ground truth. The model should have the same precision across sensitive groups.
+
+A scatter plot that plots the relationship between the selected fairness metric and each model's performance will be shown. This is coupled with an expandable insights section, allowing users to evaluate the potential trade-offs from their models and fairness.
+
+Lastly, the page will compare the aforementioned fairness metrics of each feature selected for fairness assessment, providing users with useful mitigation approaches they can take towards fairer model development. After applying fairness mitigation, users can revisit this page with a new dataset and model for comparison against their previous iterations.
 
 ## Dataset: New York City (NYC) Subway Traffic
 
@@ -151,6 +167,7 @@ Lastly, we merged the two datasets together. Our final dataset contains the foll
 - [Amazon AI Fairness and Explainability Whitepaper](https://pages.awscloud.com/rs/112-TZM-766/images/Amazon.AI.Fairness.and.Explainability.Whitepaper.pdf)
 - [Facebook’s five pillars of Responsible AI](https://ai.facebook.com/blog/facebooks-five-pillars-of-responsible-ai/)
 - [Fairness Indicators](https://github.com/tensorflow/fairness-indicators)
+- [Machine Learning Glossary](https://developers.google.com/machine-learning/glossary)
 - [How Facebook got addicted to spreading misinformation](https://www.technologyreview.com/2021/03/11/1020600/facebook-responsible-ai-misinformation/)
 - [Normal and New Normal NYC Subway Traffic 2017-21](https://www.kaggle.com/eddeng/nyc-subway-traffic-data-20172021)
 - [What-If Tool](https://pair-code.github.io/what-if-tool/)
