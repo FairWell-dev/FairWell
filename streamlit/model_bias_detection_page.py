@@ -53,11 +53,11 @@ def predictive_parity_difference(y_true, y_pred, sensitive_feature):
 def render(sidebar_handler):
     # Sidebar
     eg_dict = {
-        'Baseline Model': 'data/raw_20211028.csv',
-        'Bias Mitigated Model - AIF360': 'data/mitigation_aif360_20211031.csv'
+        'Baseline Model': 'data/final_predictions.csv',
+        'Bias Mitigated Model - AIF360': 'data/test_pred_mitigation_aif360_20211031.csv'
     }
 
-    all_data_models, selected = sidebar_handler('Dataset(s) and Model(s) for Bias Detection', 
+    all_data_models, selected = sidebar_handler('Test Dataset(s) and Model(s) for Bias Detection', 
                                                 ['csv', 'pt'], 
                                                 eg_dict)
     
@@ -66,12 +66,13 @@ def render(sidebar_handler):
         df_dict, model_dict = all_data_models
         df = df_dict[selected[0]]
         model = model_dict[selected]
+        model_name_list = model_dict.keys()
     else:
         df_dict = all_data_models
         df = df_dict[selected]
+        model_name_list = eg_dict.keys()
         
 
-    model_name_list = ['Model 1']
     dtype_dict = infer_dtypes(df)
 
     # Main

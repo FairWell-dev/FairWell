@@ -105,7 +105,7 @@ def render(sidebar_handler):
         'Bias Mitigated Dataset - AIF360': 'data/mitigation_aif360_20211031.csv'
     }
 
-    df_dict, select_key = sidebar_handler('Dataset for Feature Exploration', ['csv'], eg_dict)
+    df_dict, select_key = sidebar_handler('Dataset(s) for Feature Exploration', ['csv'], eg_dict)
     df = df_dict[select_key]
 
     # Main
