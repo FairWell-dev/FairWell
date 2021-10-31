@@ -69,7 +69,7 @@ def get_metric(df, col):
 
 def render(sidebar_handler):
     # Sidebar
-    df_list, df = sidebar_handler('Training Dataset(s) for Fairness Exploration', ['csv'], ['data/final.csv'])
+    dataset_dict, df = sidebar_handler('Training Dataset(s) for Fairness Exploration', ['csv'], ['data/final.csv'])
 
     # Main
     st.subheader("Fairness Assessment on Training Data")
@@ -116,12 +116,6 @@ def render(sidebar_handler):
     if run_comparison:
         st.subheader('Fairness Assessment')
 
-        # metric_scores = list()
-        # for col in eval_cols:
-        #     col_metric = get_metric(df, col)
-        #     metric_scores.extend(col_metric)
-        # metrics_df = pd.DataFrame(metric_scores)
-
         for col in eval_cols:
             st.markdown('##### ' + col.replace('_', ' '))
 
@@ -140,15 +134,13 @@ def render(sidebar_handler):
                 st.table(max_metric_df)
 
                 overall_df=pd.DataFrame(columns=['pair', 'Class Imbalance', 'Jensen-Shannon Divergence','dataset'])
-                for df_name in df_name_list:
+                for df_name in dataset_dict.keys():
                     with st.expander('Details: ' + df_name, expanded=False):
-                        dataset_metric_df = pd.DataFrame(get_metric(df,col))
+                        dataset_metric_df = pd.DataFrame(get_metric(dataset_dict[df_name],col))
                         dataset_metric_df['dataset']=df_name
                         overall_df = overall_df.append(dataset_metric_df)
                         dataset_metric_df.drop(columns=['dataset'], inplace=True)
                         st.table(dataset_metric_df.set_index('pair'))
-
-
 
             with col2:
                 x = overall_df['pair']
