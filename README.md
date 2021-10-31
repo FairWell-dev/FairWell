@@ -69,6 +69,17 @@ The features explorer page allows users to quickly view the distributions of the
 
 ### Fairness Assessment (Data)
 
+The aim of the data fairness assessment page is to allow users to identify and execute mitigation techniques to reduce bias within the dataset before beginning to train the model.
+
+Users will first select the target feature of the dataset and features that they would like to evaluate for biases. They then select the specific metric that they wish to view as a plot in the comparison further down the page. Following this, the fairness metrics below will be calculated for each feature:
+
+- Class Imbalance (CI): Identifies any under representation of classes within the dataset
+- Jensen-Shannon Divergence (JS): Measures label imbalance between 2 classes by measuring their similiarity between their probability distributions
+
+A scatter plot which plots the selected fairness metric for each subgroup pairing within the feature is shown. All user uploaded datasets' metrics will be plotted on the same scatter plot to allow for ease of comparison.
+
+After implementing mitigation measures on the dataset, users can then upload the new dataset and view comparisons against previous iterations.
+
 ### Fairness Assessment (Model Predictions) and Mitigation Recommendations
 
 With a model, users can easily assess the fairness of their model's predictions with regard to the input dataset. The aim is to allow for identifying bias from the model after it is trained. Coupled with the previous page on fairness assessment on the data, users can identify if the source of bias comes from the data or model, or both.
@@ -89,7 +100,7 @@ The dataset we selected consists of subway traffic in NYC, along with neighborho
 
 ### Problem Statement
 
-Public transport has become a necessity in our modern landscape. Agencies are interested in capitilising on data on public transport usage such as subway traffic to inform their location based business decisions.
+Public transport has become a necessity in our modern landscape. Agencies are interested in capitalising on data on public transport usage such as subway traffic to inform their location based business decisions.
 
 Government entities involved in urban planning might utilise subway traffic conditions to determine neighbourhoods that could benefit from neighbourhood rejuvenation or to inform other land usage planning decisions.<sup>8</sup> Governments can also benefit from having a gauge of how investing into a neighbourhood will affect traffic volume via subway in different areas through census data.
 
