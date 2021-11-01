@@ -1,3 +1,5 @@
+import json
+import numpy as np
 import os
 import pandas as pd
 import streamlit as st
@@ -7,6 +9,34 @@ import torch
 import features_page
 import data_fairness_page
 import model_bias_detection_page
+
+def convert_to_tensor(df, columns, type='Float'):
+    arr = np.array(df[[*columns]]).astype(int) 
+    tensor = torch.Tensor(arr)
+
+    if type == 'Long':
+        return tensor.type(torch.LongTensor)
+    
+    return tensor
+
+def predict(model, x1_ts, x2_ts, threshold=0.5):
+    """
+    :param model: Torchscript model
+    :param inputs: Torch tensor (or tuple of Torch tensors) to be fed to model
+    :param threshold: Classification threshold value, default 0.5
+    :return pred_proba: Numpy array, probability predictions for class 1
+    :return y_pred: Numpy array, predicted labels (0/1) based on threshold
+    """
+    with torch.no_grad():
+      model.eval()
+      pred_proba = model(x1_ts, x2_ts)
+
+    # convert from tensor to np array
+    pred_proba = pred_proba.detach().cpu().numpy()   
+    
+    y_pred = [1 if i >= threshold else 0 for i in pred_proba]
+
+    return pred_proba, y_pred
 
 def read_csv_list(file_list, selected=None):
     # Check for user uploads
@@ -26,14 +56,30 @@ def read_csv_list(file_list, selected=None):
             select_key = key
     return df_dict, select_key
 
-# def run_inference(file_list, df_dict): #TODO
+def run_inference(file_list, df_dict, json_files): #TODO
     # Loads list of models, runs inference and returns predictions
-    # pred_dict = {}
-    # select_key = None
-    # for file_path in file_list:
-    #     TODO: Add model loading and inference code
-    #     pred_dict[file_path] = pred_df
-    # return pred_dict, select_key
+    pred_dict = {}
+    for file_path in file_list:
+        # Define key from file_path
+        key = os.path.basename(file_path.name)[:-3]
+
+        # Get corresponding feature_dict
+        json_file = [file for file in json_files 
+                if file.name[:-5] == key][0]
+        feature_dict = json.load(json_file)
+        
+        # Get corresponding test data
+        test_df = df_dict[key]
+        x1_ts = convert_to_tensor(test_df, feature_dict.get('x1'), type='Long')
+        x2_ts = convert_to_tensor(test_df, feature_dict.get('x2'))
+        
+        # Load model and get predictions
+        model = torch.jit.load(file_path)
+        pred_proba, y_pred = predict(model, x1_ts, x2_ts)
+        test_df[feature_dict['y'][0]+'_prediction'] = y_pred
+        test_df[feature_dict['y'][0]+'_probability'] = pred_proba
+        pred_dict[key] = test_df
+    return pred_dict
 
 def sidebar_handler(label, type_list, eg_dict):
     eg_labels = eg_dict.keys()
@@ -50,17 +96,21 @@ def sidebar_handler(label, type_list, eg_dict):
                                         accept_multiple_files = True)
     
     # Load Files
-    if file_list:
-        csv_files = [file for file in file_list if file.type in ['text/csv', 'application/vnd.ms-excel']]
-        pth_files = [file for file in file_list if file.type in ['application/octet-stream']] #TODO
-        upload_dict = dict(zip(list(range(len(file_list))),file_list))
-        df_dict, select_key = read_csv_list(csv_files)
-        # TODO: Model Upload feature
-        # if len(type_list) > 1:
-            # Run Inference
-            # return run_inference(models, df_dict)
-        return df_dict, select_key
-    else:
+    try:
+        if file_list:
+            csv_files = [file for file in file_list if file.type in ['text/csv', 'application/vnd.ms-excel']]
+            pt_files = [file for file in file_list if file.type in ['application/octet-stream']] #TODO
+            json_files =  [file for file in file_list if file.type in ['application/json']]
+            df_dict, select_key = read_csv_list(csv_files)
+            if len(type_list) > 1:
+                # Run Inference
+                    pred_dict = run_inference(pt_files, df_dict, json_files)
+                    selected = pred_dict[select_key]
+                    return pred_df, select_key
+        else:
+            return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
+    except:
+        st.warning("Please ensure you have uploaded the corresponding model, test dataset and features json.")
         return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
 
 # Config 
