@@ -96,21 +96,22 @@ def sidebar_handler(label, type_list, eg_dict):
                                         accept_multiple_files = True)
     
     # Load Files
-    try:
-        if file_list:
-            csv_files = [file for file in file_list if file.type in ['text/csv', 'application/vnd.ms-excel']]
-            pt_files = [file for file in file_list if file.type in ['application/octet-stream']] #TODO
-            json_files =  [file for file in file_list if file.type in ['application/json']]
-            df_dict, select_key = read_csv_list(csv_files)
-            if len(type_list) > 1:
-                # Run Inference
-                    pred_dict = run_inference(pt_files, df_dict, json_files)
-                    selected = pred_dict[select_key]
-                    return pred_dict, select_key
-        else:
-            return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
-    except:
-        st.warning("Please ensure you have uploaded the corresponding model, test dataset and features json files with the same name for each model")
+    if file_list:
+        csv_files = [file for file in file_list if file.type in ['text/csv', 'application/vnd.ms-excel']]
+        pt_files = [file for file in file_list if file.type in ['application/octet-stream']]
+        json_files =  [file for file in file_list if file.type in ['application/json']]
+        df_dict, select_key = read_csv_list(csv_files)
+        if len(type_list) > 1:
+            try:
+            # Run Inference
+                pred_dict = run_inference(pt_files, df_dict, json_files)
+                selected = pred_dict[select_key]
+                return pred_dict, select_key
+            except:
+                st.warning("Please ensure you have uploaded the corresponding model, test dataset and features json files with the same name for each model")
+                return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
+        return df_dict, select_key
+    else:
         return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
 
 # Config 
