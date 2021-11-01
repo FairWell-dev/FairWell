@@ -19,7 +19,7 @@ def convert_to_tensor(df, columns, type='Float'):
     
     return tensor
 
-def predict(model, x1_ts, x2_ts, threshold=0.5):
+def predict(model, inputs, threshold=0.5):
     """
     :param model: Torchscript model
     :param inputs: Torch tensor (or tuple of Torch tensors) to be fed to model
@@ -29,7 +29,7 @@ def predict(model, x1_ts, x2_ts, threshold=0.5):
     """
     with torch.no_grad():
       model.eval()
-      pred_proba = model(x1_ts, x2_ts)
+      pred_proba = model(*inputs)
 
     # convert from tensor to np array
     pred_proba = pred_proba.detach().cpu().numpy()   
@@ -75,7 +75,7 @@ def run_inference(file_list, df_dict, json_files): #TODO
         
         # Load model and get predictions
         model = torch.jit.load(file_path)
-        pred_proba, y_pred = predict(model, x1_ts, x2_ts)
+        pred_proba, y_pred = predict(model, (x1_ts, x2_ts))
         test_df[feature_dict['y'][0]+'_prediction'] = y_pred
         test_df[feature_dict['y'][0]+'_probability'] = pred_proba
         pred_dict[key] = test_df
@@ -106,11 +106,11 @@ def sidebar_handler(label, type_list, eg_dict):
                 # Run Inference
                     pred_dict = run_inference(pt_files, df_dict, json_files)
                     selected = pred_dict[select_key]
-                    return pred_df, select_key
+                    return pred_dict, select_key
         else:
             return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
     except:
-        st.warning("Please ensure you have uploaded the corresponding model, test dataset and features json.")
+        st.warning("Please ensure you have uploaded the corresponding model, test dataset and features json files with the same name for each model")
         return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
 
 # Config 
