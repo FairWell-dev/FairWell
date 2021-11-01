@@ -77,7 +77,7 @@ def get_metric(target, df, col):
 
 def render(sidebar_handler):
     eg_dict = {
-        'Baseline Dataset': 'data/raw_20211028.csv',
+        'Baseline Dataset': 'data/mitigation_SMOTE(binned_Percent Asian)_20211031.csv',
         'Bias Mitigated - AIF360 Dataset': 'data/mitigation_aif360_20211031.csv'
     }
 
@@ -108,11 +108,16 @@ def render(sidebar_handler):
         else:
             eval_cols = container.multiselect('Features to evaluate (select one or more)',
                                             col_to_select)
-
+        
         metric_to_show = st.radio('Metric to plot (y axis)', 
                 options=['Class Imbalance', 'Jensen-Shannon Divergence'])
-
+        num_rows = st.number_input('Select number of results to show in summary', 
+                                min_value=1,
+                                max_value=100,
+                                value=10,
+                                step=1)
         run_comparison = st.button('Run Fairness Assessment')
+
 
     with col2:
         with st.expander('Show subgroups (unique values) of selected features to evaluate', expanded=True):
@@ -128,6 +133,9 @@ def render(sidebar_handler):
     if run_comparison:
         st.subheader('Fairness Assessment')
 
+        summary_ctn = st.container()
+        summary_df = pd.DataFrame(columns=['pair', 'Class Imbalance', 'Jensen-Shannon Divergence','dataset','column'])
+
         for col in eval_cols:
             st.markdown('##### ' + col.replace('_', ' '))
 
@@ -135,7 +143,7 @@ def render(sidebar_handler):
                 st.text(col + ' has too many subgroups (' + str(nunique) + '). Metrics and comparisons will not be run.')
                 continue
 
-            col1, col2 = st.columns([0.6, 0.4])
+            col1, col2 = st.columns([0.5, 0.5])
 
             with col1:
                 container = st.container()
@@ -164,7 +172,6 @@ def render(sidebar_handler):
 
                 container.table(max_metric_df)
 
-
             with col2:
                 x = overall_df['pair']
                 y = overall_df[metric_to_show]
@@ -173,10 +180,18 @@ def render(sidebar_handler):
                                 color=overall_df['dataset'],
                                 labels={'x':'Subgroups', 'y':metric_to_show})
                 fig.update_traces(textposition='top right')
-                fig.update_layout(height=350, margin=dict(l=0, r=0, t=0, b=0))
+                fig.update_layout(height=350, margin=dict(l=0, r=0, t=0, b=0), showlegend=False)
                 st.plotly_chart(fig,
                     use_container_width=True,
                     config={'responsive': False, 'displayModeBar': False})
+
+            overall_df['column'] = col
+            summary_df = summary_df.append(overall_df[overall_df['dataset']==select_key])
+
+        summary_df.sort_values(by=[metric_to_show], ascending=False, inplace=True)
+        summary_ctn.markdown(f'##### {metric_to_show} score summary for {select_key} dataset')
+        summary_ctn.table(summary_df[['column','pair',metric_to_show]].iloc[:num_rows].set_index(['column']))
+
 
 
 
