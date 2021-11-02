@@ -29,7 +29,7 @@ More commonly, we identify bias based on decisions (i.e. predicitions) made by t
 
 - **Individual Fairness.** Fairness definitions at the individual level focuses on the relative similarity between individuals. Therefore, similar individuals should be treated similarly with similar decisions.<sup>12, 13</sup>
 
-- **Group Fairness.** Group fairness as the term suggests, focuses on reducing bias for a group of individuals. It is believed that different groups of people are being unfairly treated and thus aims to attain fairness for each respective group.<sup>13</sup> Some popular definitions of group fairness include but not limited to demographic parity, Equal oportunity, predictive parity, etc.<sup>14</sup>
+- **Group Fairness.** Group fairness as the term suggests, focuses on reducing bias for a group of individuals. It is believed that different groups of people are being unfairly treated and thus aims to attain fairness for each respective group.<sup>13</sup> Some popular definitions of group fairness include but not limited to demographic parity, equal opportunity, predictive parity, etc.<sup>14</sup>
 
 - **Per Group Performance Fairness.** Another school of thought for fairness is the idea of per group performance. This school of thought attempts to maximise the utility of an individual group to attain fairness.<sup>13</sup> Examples include Pareto-fairness<sup>15</sup> and Rawlsian Max-Min fairness<sup>16</sup>.
 
@@ -67,7 +67,7 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 
 The features explorer page allows users to quickly view the distributions of their dataset, as well as the summary statistics for each feature. An algorithm is created to quickly infer the data types of each feature, categorising them into either numerical or categorical. Based on the data type, a histogram or bar chart will be shown for numerical or categorical data type respectively.
 
-### Fairness Assessment (Data)
+### Data Fairness Assessment
 
 The aim of the data fairness assessment page is to allow users to identify and execute mitigation techniques to reduce bias within the dataset before beginning to train the model.
 
@@ -80,7 +80,7 @@ A scatter plot which plots the selected fairness metric for each subgroup pairin
 
 After implementing mitigation measures on the dataset, users can then upload the new dataset and view comparisons against previous iterations.
 
-### Fairness Assessment (Model Predictions) and Mitigation Recommendations
+### Model Bias Detection & Mitigation
 
 With a model, users can easily assess the fairness of their model's predictions with regard to the input dataset. The aim is to allow for identifying bias from the model after it is trained. Coupled with the previous page on fairness assessment on the data, users can identify if the source of bias comes from the data or model, or both.
 
