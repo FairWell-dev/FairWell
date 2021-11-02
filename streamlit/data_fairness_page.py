@@ -61,7 +61,7 @@ def get_metric(target, df, col):
     class_p_cnt = df[df[target].isin([df[target].unique()[1]])][col].value_counts()
 
     for pair in class_comb:
-        tmp = {'pair':str(pair)}
+        tmp = {'Subgroup Pair':str(pair)}
 
         # calculate ci
         ci = get_ci(class_cnt, pair)
@@ -86,7 +86,7 @@ def render(sidebar_handler):
     df = dataset_dict[select_key]
 
     # Main
-    st.subheader("Fairness Assessment on Training Data")
+    st.subheader("Fairness Assessment on Dataset")
 
     # Config
     col1, col2 = st.columns(2)
@@ -98,6 +98,7 @@ def render(sidebar_handler):
         col_to_select=[col for col in get_cols(df) 
                         if infer_dtypes(df)[col]=='categorical'
                         and df[col].nunique()<=10
+                        and df[col].nunique()>1
                         and col!=target]
         container = st.container()
         all = st.checkbox('Select all')
@@ -123,7 +124,7 @@ def render(sidebar_handler):
         with st.expander('Show subgroups (unique values) of selected features to evaluate', expanded=True):
             unique_vals_dict = dict()
             for col in eval_cols:
-                unique_vals_dict[col] = str(df[col].unique().tolist())
+                unique_vals_dict[col] = str(np.sort(df[col].unique()).tolist())
             st.json(unique_vals_dict)
 
     if df[target].nunique() > 2:
@@ -134,7 +135,7 @@ def render(sidebar_handler):
         st.subheader('Fairness Assessment')
 
         summary_ctn = st.container()
-        summary_df = pd.DataFrame(columns=['pair', 'Class Imbalance', 'Jensen-Shannon Divergence','dataset','column'])
+        summary_df = pd.DataFrame(columns=['Subgroup Pair', 'Class Imbalance', 'Jensen-Shannon Divergence','dataset','column'])
 
         for col in eval_cols:
             st.markdown('##### ' + col.replace('_', ' '))
@@ -148,7 +149,7 @@ def render(sidebar_handler):
             with col1:
                 container = st.container()
                 max_metric_df = pd.DataFrame(columns=['Max Class Imbalance', 'Max Jensen-Shannon Divergence'])
-                overall_df=pd.DataFrame(columns=['pair', 'Class Imbalance', 'Jensen-Shannon Divergence','dataset'])
+                overall_df=pd.DataFrame(columns=['Subgroup Pair', 'Class Imbalance', 'Jensen-Shannon Divergence','dataset'])
                 for df_name in dataset_dict.keys():
                     df_tmp = dataset_dict[df_name]
                     dataset_metric_df = pd.DataFrame(get_metric(target, df_tmp, col))
@@ -168,17 +169,17 @@ def render(sidebar_handler):
                         dataset_metric_df['dataset']=df_name
                         overall_df = overall_df.append(dataset_metric_df)
                         dataset_metric_df.drop(columns=['dataset'], inplace=True)
-                        st.table(dataset_metric_df.set_index('pair'))
+                        st.table(dataset_metric_df.set_index('Subgroup Pair'))
 
                 container.table(max_metric_df)
 
             with col2:
-                x = overall_df['pair']
+                x = overall_df['Subgroup Pair']
                 y = overall_df[metric_to_show]
                 fig = px.scatter(x=x,
                                 y=y,
                                 color=overall_df['dataset'],
-                                labels={'x':'Subgroups', 'y':metric_to_show})
+                                labels={'x':'Subgroup Pairs', 'y':metric_to_show})
                 fig.update_traces(textposition='top right')
                 fig.update_layout(height=350, margin=dict(l=0, r=0, t=0, b=0), showlegend=False)
                 st.plotly_chart(fig,
@@ -190,7 +191,7 @@ def render(sidebar_handler):
 
         summary_df.sort_values(by=[metric_to_show], ascending=False, inplace=True)
         summary_ctn.markdown(f'##### {metric_to_show} score summary for {select_key} dataset')
-        summary_ctn.table(summary_df[['column','pair',metric_to_show]].iloc[:num_rows].set_index(['column']))
+        summary_ctn.table(summary_df[['column','Subgroup Pair',metric_to_show]].iloc[:num_rows].set_index(['column']))
 
 
 
