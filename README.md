@@ -179,7 +179,8 @@ Lastly, we merged the two datasets together. Our final dataset contains the foll
 \*\*\*\*\* Used to derive "EntriesExits" target feature
 
 ### Fairness Assessment on Dataset
-
+Recall that bias can occur in the data even prior to training a model. To simplfy the assessment process, we first bin the continuous features into binary categories based on their average values. 
+For example, "Unemployment Rate".
 
 ### Modelling with PyTorch
 
@@ -188,6 +189,18 @@ Lastly, we merged the two datasets together. Our final dataset contains the foll
 
 
 ### Fairness Mitigation
+Based on our [Responsible AI Research](#responsible-ai-research), we have identified 2 approaches in mitigating bias, pre-processing the dataset and in-processing where we impose a fairness loss constraint during model training. 
+
+#### Pre-processing
+1. Supression<sup>17</sup>
+   - In this approach we naively dropped protected features and their closely corelated features in an attempt to hide these features from the model. 
+   - In this dataset we found that feature X is closely corelated to features A, B and C. Thus we decided to supress these features by removing them from the training dataset.
+2. Under sampling<sup>17</sup>
+   - In this approach we first identified 
+3. Reweighing<sup>17</sup>
+
+#### In-processing
+1. Fairness loss constraint
 
 
 ### Effect of Mitigation Approach
@@ -213,6 +226,7 @@ Lastly, we merged the two datasets together. Our final dataset contains the foll
 14. [Fairness and Machine Learning](http://www.fairmlbook.org)
 15. [Pareto-Efficient Fairness for Skewed Subgroup Data](https://aiforsocialgood.github.io/icml2019/accepted/track1/pdfs/24_aisg_icml2019.pdf)
 16. [The Price of Fairness](https://core.ac.uk/download/pdf/4429576.pdf)
+17. [Data preprocessing techniques for classification without discrimination](https://link.springer.com/article/10.1007/s10115-011-0463-8)
 ## Acknowledgements
 
 Thanks to our friends at Mastercard (Apurva, Bharathi, Hui Chiang, Idaly and Louis) for their advice and guidance on AI fairness.
