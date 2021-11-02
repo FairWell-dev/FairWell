@@ -82,7 +82,7 @@ def render(sidebar_handler):
     }
 
     # Sidebar
-    dataset_dict, select_key = sidebar_handler('Training Dataset(s) for Fairness Assessment', ['csv'], eg_dict)
+    dataset_dict, select_key = sidebar_handler('Dataset(s) for Fairness Assessment', ['csv'], eg_dict)
     df = dataset_dict[select_key]
 
     # Main
