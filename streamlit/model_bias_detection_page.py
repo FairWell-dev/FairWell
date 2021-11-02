@@ -103,6 +103,7 @@ def render(sidebar_handler):
     if run_comparison:
         st.subheader('Overall Model Performance')
         for model_name in model_name_list:
+            df = pred_df_dict[model_name]
             with st.expander('Model Performance: ' + model_name):
                 col1, col2 = st.columns(2)
 
@@ -149,6 +150,7 @@ def render(sidebar_handler):
                 st.table(overall_df)
 
                 for model_name in model_name_list:
+                    df = pred_df_dict[model_name]
                     with st.expander('Details: ' + model_name, expanded=True):
                         grouped_metric = flm.MetricFrame(metrics={'N': flm.count,
                                                     'Accuracy': skm.accuracy_score,
