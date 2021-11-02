@@ -82,13 +82,16 @@ def run_inference(file_list, df_dict, json_files): #TODO
     return pred_dict
 
 def sidebar_handler(label, type_list, eg_dict):
-    eg_labels = eg_dict.keys()
-    # Example Use Case
-    st.sidebar.title('Example: NYC Subway Traffic')
-    selected_eg = st.sidebar.selectbox('',
-                                        options=eg_labels,
-                                        index=0) 
     
+    # Example Use Case
+    eg_labels = eg_dict.keys()
+    selected_eg = list(eg_labels)[0]
+    st.sidebar.title('Example: NYC Subway Traffic')
+    example = ''
+    for dataset in eg_labels:
+        example += '- **%s**\n' % dataset
+    st.sidebar.markdown(example)
+
     # User Upload
     st.sidebar.title('Upload')
     file_list = st.sidebar.file_uploader('%s, (%s)' % (label, ', '.join([type.upper() for type in type_list])),
