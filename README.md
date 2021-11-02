@@ -168,15 +168,14 @@ Feature Engineering was done on two columns: "Number of Stations" and "Neighborh
 
 Lastly, we merged the two datasets together. Our final dataset contains the following features:
 
-| Features from Neighborhood Census Data  | Features from Subway Data\* |
+| Features from Neighborhood Census Data  | Features from Subway Data<sup>a</sup> |
 | --------------------------------------- | -------------------------- |
-| Neighborhood<br>Car-free commute (% of commuters)\*\*\*<br>Disabled population<br>Foreign-born population<br>Median household income (2018$)<br>Median rent, all (2018$)<br>Percent Asian\*\*\*<br>Percent Hispanic\*\*\*<br>Percent Black\*\*\*<br>Percent white\*\*\*<br>Population\*\*\*\*<br>Poverty rate<br>Public housing (% of rental units)\*\*\*<br>Unemployment rate<br>Residential units within 12 mile of a subway station<br>Population density (1,000 persons per square mile)\*\*\*\*<br>Serious crime rate (per 1,000 residents)<br>Severely rent-burdened households<br>Rental vacancy rate<br>Mean travel time to work (minutes)| Datetime<br>Stop Name<br>Connecting Lines\*\*<br>Division\*\*<br>Structure\*\*<br>Borough\*\*<br>Neighborhood<br>Entries\*\*\*\*\*<br>Exits\*\*\*\*\* |
+| Neighborhood<br>Car-free commute (% of commuters)<br>Disabled population<br>Foreign-born population<br>Median household income (2018$)<br>Median rent, all (2018$)<br>Percent Asian<br>Percent Hispanic<br>Percent Black<br>Percent white<br>Population<sup>c</sup><br>Poverty rate<br>Public housing (% of rental units)<br>Unemployment rate<br>Residential units within 12 mile of a subway station<br>Population density (1,000 persons per square mile)<sup>c</sup><br>Serious crime rate (per 1,000 residents)<br>Severely rent-burdened households<br>Rental vacancy rate<br>Mean travel time to work (minutes)| Datetime<br>Stop Name<br>Connecting Lines<sup>b</sup><br>Division<sup>b</sup><br>Structure<sup>b</sup><br>Borough<sup>b</sup><br>Neighborhood<br>Entries<sup>d</sup><br>Exits<sup>d</sup> |
 
-\* Used to derive "Number of Stations" feature \
-\*\* One hot encoded features \
-\*\*\* Binned features \
-\*\*\*\* Used to derive ""Neighborhood Area Size"" feature \
-\*\*\*\*\* Used to derive "EntriesExits" target feature
+<sup>a</sup> Used to derive "Number of Stations" feature <br>
+<sup>b</sup> One hot encoded features <br>
+<sup>c</sup> Used to derive ""Neighborhood Area Size"" feature <br>
+<sup>d</sup> Used to derive "EntriesExits" target feature
 
 ### Fairness Assessment on Dataset
 Recall that bias can occur in the data even prior to training a model. To simplfy the assessment process, we first bin the continuous features into binary categories based on their average values. 
@@ -197,7 +196,10 @@ Based on our [Responsible AI Research](#responsible-ai-research), we have identi
    - In this dataset we found that feature X is closely corelated to features A, B and C. Thus we decided to supress these features by removing them from the training dataset.
 2. Under sampling<sup>17</sup>
    - In this approach we first identified 
+
+
 3. Reweighing<sup>17</sup>
+   - In this approach, we took the 
 
 #### In-processing
 1. Fairness loss constraint
