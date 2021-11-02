@@ -56,16 +56,9 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 
 ## FairWell
 
-### Tools and Technologies Used
+### Feature Explorer
 
-- <img src="https://streamlit.io/images/brand/streamlit-mark-color.png" width="20"/> [Streamlit](https://streamlit.io/)
-- [Microsoft Fairlearn](https://fairlearn.org/)
-- [AI Fairness 360](https://aif360.mybluemix.net/)
-- Data Science packages (NumPy, Pandas, Plotly)
-
-### Features Explorer
-
-The features explorer page allows users to quickly view the distributions of their dataset, as well as the summary statistics for each feature. An algorithm is created to quickly infer the data types of each feature, categorising them into either numerical or categorical. Based on the data type, a histogram or bar chart will be shown for numerical or categorical data type respectively.
+The feature explorer page allows users to quickly view the distributions of their dataset, as well as the summary statistics for each feature. An algorithm is created to quickly infer the data types of each feature, categorising them into either numerical or categorical. Based on the data type, a histogram or bar chart will be shown for numerical or categorical data type respectively.
 
 ### Data Fairness Assessment
 
@@ -207,8 +200,16 @@ Based on our [Responsible AI Research](#responsible-ai-research), we have identi
 
 ### Effect of Mitigation Approach
 
+## Tools and Technologies Used
+- PyTorch
+- <img src="https://streamlit.io/images/brand/streamlit-mark-color.png" width="20"/> [Streamlit](https://streamlit.io/)
+- [Microsoft Fairlearn](https://fairlearn.org/)
+- [AI Fairness 360](https://aif360.mybluemix.net/)
+- FairTorch
+- Data Science packages (NumPy, Pandas, Plotly)
 
 ## Conclusion and Future Work
+
 
 ## References
 
