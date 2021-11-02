@@ -126,9 +126,9 @@ st.set_page_config(page_title='FairWell',
 st.sidebar.title('FairWell')
 page = st.sidebar.radio('Navigate', 
                         options=['Guide',
-                        'Feature Exploration', 
+                        'Feature Explorer', 
                         'Data Fairness Assessment', 
-                        'Model Bias Detection'], # geospatial
+                        'Model Bias Detection & Mitigation'],
                         index=0)
 
 # Title
@@ -138,11 +138,11 @@ st.title('FairWell')
 if page.lower() == 'guide':
     about = open('README.md', 'r')
     st.markdown(about.read())
-elif page.lower() == 'feature exploration':
+elif page.lower() == 'feature explorer':
     features_page.render(sidebar_handler)
 elif page.lower() == 'data fairness assessment':
     data_fairness_page.render(sidebar_handler)
-elif page.lower() == 'model bias detection':
+elif page.lower() == 'model bias detection & mitigation':
     model_bias_detection_page.render(sidebar_handler)
 else:
     st.text('Page ' + page + ' is not implemented.')

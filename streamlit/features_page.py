@@ -101,11 +101,10 @@ def plot_histogram(series):
 def render(sidebar_handler):
     # Sidebar
     eg_dict = {
-        'Baseline Dataset': 'data/raw_20211028.csv',
-        'Bias Mitigated Dataset - AIF360': 'data/mitigation_aif360_20211031.csv'
+        'Baseline Dataset': 'data/raw_20211028.csv'
     }
 
-    df_dict, select_key = sidebar_handler('Dataset(s) for Feature Exploration', ['csv'], eg_dict)
+    df_dict, select_key = sidebar_handler('Dataset(s) for Feature Explorer', ['csv'], eg_dict)
     df = df_dict[select_key]
 
     # Main

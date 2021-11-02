@@ -57,7 +57,7 @@ def render(sidebar_handler):
     dtype_dict = infer_dtypes(df)
 
     # Main
-    st.subheader("Bias Detection on Trained Model")
+    st.subheader("Bias Detection and Comparison on Trained Model")
 
     # Config
     col1, col2 = st.columns(2)
