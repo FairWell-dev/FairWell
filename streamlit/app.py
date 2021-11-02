@@ -41,7 +41,7 @@ def predict(model, inputs, threshold=0.5):
 def read_csv_list(file_list, selected=None):
     # Check for user uploads
     if not selected:
-        selected = st.sidebar.selectbox("Select One (CSV)",
+        selected = st.sidebar.selectbox("Select one dataset for selection of features.",
             options=[file.name for file in file_list],
             index=0)
     df_dict = {}
