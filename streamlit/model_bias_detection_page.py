@@ -69,13 +69,21 @@ def render(sidebar_handler):
 
         prediction = target + '_prediction'
 
-        cols_to_eval = st.multiselect('Categorical features to evaluate for fairness \
-                                      (features with >10 subgroups will not be shown)', 
-                                      options=[col for col in df.columns 
+        all_cols_to_eval = [col for col in df.columns \
                                                if (col not in [target, prediction]) and \
                                                    (dtype_dict[col] == 'categorical') and \
-                                                   (df[col].nunique() <= 10)])
-
+                                                   (df[col].nunique() <= 10)]
+        container = st.container()
+        all = st.checkbox('Select all')
+        if all:
+            cols_to_eval = container.multiselect('Categorical features to evaluate for fairness \
+                                        (features with >10 subgroups will not be shown)', 
+                                        options=all_cols_to_eval,
+                                        default=all_cols_to_eval)
+        else:
+            cols_to_eval = container.multiselect('Categorical features to evaluate for fairness \
+                                        (features with >10 subgroups will not be shown)', 
+                                        options=all_cols_to_eval)
         x_axis_metric = 'Accuracy'
         y_axis_metric = st.radio('Metric to plot (y-axis)', 
                                  options=['Demographic Parity', 'Equalized Odds', 'Predictive Parity'])
@@ -127,25 +135,32 @@ def render(sidebar_handler):
             col1, col2 = st.columns([0.6, 0.4])
 
             with col1:
-                # Calculate overall scores
-                acc = skm.accuracy_score(df[target], df[prediction])
-                dpd = flm.demographic_parity_difference(y_true=df[target],
+                acc_l, dpd_l, eod_l, ppd_l = [], [], [], []
+                for model_name in model_name_list:
+                    df = pred_df_dict[model_name]
+                    
+                    # Calculate overall scores
+                    acc = skm.accuracy_score(df[target], df[prediction])
+                    dpd = flm.demographic_parity_difference(y_true=df[target],
+                                                            y_pred=df[prediction], 
+                                                            sensitive_features=df[col_name],
+                                                            method='between_groups')
+                    eod = flm.equalized_odds_difference(y_true=df[target],
                                                         y_pred=df[prediction], 
                                                         sensitive_features=df[col_name],
                                                         method='between_groups')
-                eod = flm.equalized_odds_difference(y_true=df[target],
+                    ppd = predictive_parity_difference(y_true=df[target],
                                                     y_pred=df[prediction], 
-                                                    sensitive_features=df[col_name],
-                                                    method='between_groups')
-                ppd = predictive_parity_difference(y_true=df[target],
-                                                   y_pred=df[prediction], 
-                                                   sensitive_feature=df[col_name])
-
+                                                    sensitive_feature=df[col_name])
+                    acc_l.append(acc)
+                    dpd_l.append(dpd)
+                    eod_l.append(eod)
+                    ppd_l.append(ppd)
                 overall_df = pd.DataFrame({
-                    'Accuracy': [acc],
-                    'Demographic Parity': [dpd],
-                    'Equalized Odds': [eod],
-                    'Predictive Parity': [ppd]
+                    'Accuracy': acc_l,
+                    'Demographic Parity': dpd_l,
+                    'Equalized Odds': eod_l,
+                    'Predictive Parity': ppd_l
                 }, index=model_name_list)
                 st.table(overall_df)
 
