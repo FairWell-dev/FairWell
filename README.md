@@ -259,6 +259,11 @@ The baseline trained model, testing dataset and feature list were then uploaded 
 
 Based on our assessment of both data fairness and model fairness, we narrowed down to a list of features that exhibited both high Jensen-Shannon Divergence and high Demographic Parity disparity. On the top of that list was the **Privileged: Lower Foreign-born population** feature, with a score of 0.0264 max Jensen-Shannon Divergence and 0.2251 Demographic Parity.
 
+The following mitigation approaches were performed independently (more details on the [following section](#fairness-mitigation)):
+- Undersampling (pre-processing mitigation)
+- Reweighing (pre-processing mitigation)
+- Demographic Parity Loss (in-processing mitigation)
+
 With **Privileged: Lower Foreign-born population** as the sensitive feature, undersampling was applied to the dataset (pre-processing mitigation) and demographic parity loss (in-processing mitigation) was utilised during model training. The mitigation approaches are applied separately, thus the resulting datasets and models are independent of each other.
 
 ![](./images/Undersampling%20Fairness%20Metrics%20on%20Predictions.PNG)
@@ -267,7 +272,11 @@ With **Privileged: Lower Foreign-born population** as the sensitive feature, und
 
 Comparing Demographic Parity, the undersampled dataset did not perform as well on the sensitive feature, with a higher Demographic Parity score of 0.284. This could be attributed to a small number (about 50) of neighbourhoods, which can in turn affect the undersampling technique utilised.
 
+As for the reweighing (pre-processing mitigation) approach, we took all 11 features into account to generate weights for each observation. 
 
+![](./images/Reweighing%20Fairness%20Metrics%20on%20Predictions.PNG)
+
+Comparing the Demographic Parity for each feature, all of the values were lower. This indicates that the model predictions are fairer, compared to the baseline dataset.
 
 ### Fairness Mitigation
 
