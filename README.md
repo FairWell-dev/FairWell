@@ -227,6 +227,15 @@ Based on our [Responsible AI Research](#responsible-ai-research), we have identi
 - Data Science packages (NumPy, Pandas, Plotly)
 - Heroku
 
+What we have learnt:
+
+
+## Challenges/Limitations
+
+
+## Accomplishments
+
+
 ## Conclusion and Future Work
 
 - Mention all is fair and well
