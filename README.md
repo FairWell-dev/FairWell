@@ -288,7 +288,7 @@ Comparing the Demographic Parity for each feature, all of the values were lower.
 
 ### Fairness Mitigation
 
-Based on our [Responsible AI Research](#responsible-ai-research), we have identified two approaches in mitigating bias, pre-processing the dataset and in-processing where we impose a fairness loss constraint during model training. In our example use case, we tried 3 of those approaches.
+Based on our [Responsible AI Research](#responsible-ai-research), we have identified two approaches in mitigating bias, pre-processing the dataset and in-processing where we impose a fairness loss constraint during model training. In our example use case, we tried 3 of those approaches. For all datasets, time-based features were generated and min-max transformation of numerical features and label encoding of categorical features was conducted.
 
 #### Pre-processing
 
