@@ -124,7 +124,9 @@ _Processing of file upload on heroku application might take some time._
 
 The feature explorer page allows users to quickly view the **distributions** of their dataset, as well as the **summary statistics** for each feature. An algorithm is created to quickly infer the data types of each feature, categorising them into either numerical or categorical. Based on the data type, a histogram or bar chart will be shown for numerical or categorical data type respectively.
 
-![](./images/Example%20-%20Feature%20Explorer.png)
+![](./images/Example%20-%20Feature%20Explorer%201.png)
+
+![](./images/Example%20-%20Feature%20Explorer%202.png)
 
 ### Data Fairness Assessment
 
