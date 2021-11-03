@@ -2,13 +2,15 @@
 
 ## Introduction
 
-FairWell is a Responsible AI tool developed using Streamlit. In this report, research on Responsible AI is presented, followed by elaborating on the FairWell tool. Lastly, a use case on how Responsible AI can be used to evaluate a model is shown, where the New York City (NYC) Subway dataset is used to model a binary classification problem on high/low traffic.
+FairWell is a Responsible AI tool developed using Streamlit. The aim is to address model biasness on specific groups of people, allowing data scientists to evaluate their dataset and model predictions, and take steps toward making their datasets more inclusive and their models less biased. The tool allows users to detect fairness issues in both datasets and models, and in turn, get inspiration on various mitigation approaches through mitigation recommendations.
+
+In this report, research on Responsible AI is presented, followed by elaborating on the FairWell tool. Lastly, a use case on how Responsible AI can be used to evaluate a model is shown, where the New York City (NYC) Subway dataset is used to model a binary classification problem on high/low traffic.
 
 ## Responsible AI Research
 
 The problem of defining and addressing fairness has been a topic of increasing importance in the recent years. Especially with work surrounding machine learning. Multiple definitions of fairness have been raised, each having their own pros and cons. This work does not aim to propose a single notion of fairness but rather we aim to (i) provide tools on how to measure and assess fairness and (ii) how to mitigate bias in models where necessary. Our work can be summarised as below:
 
-1. Fairness assesment<sup>1, 12, 13</sup>
+1. Fairness assessment<sup>1, 12, 13</sup>
    1. On data
    2. On model predictions
 2. Bias mitigation<sup>12</sup>
@@ -56,6 +58,10 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 
 ## FairWell
 
+FairWell automates areas in the machine pipeline where fairness assessment and mitigation can be automated, to reduce friction faced by data scientists when developing Responsible AI models.
+
+![](./images/FairWell%20Focus%20on%20Pipeline.png)
+
 ### Feature Explorer
 
 The feature explorer page allows users to quickly view the distributions of their dataset, as well as the summary statistics for each feature. An algorithm is created to quickly infer the data types of each feature, categorising them into either numerical or categorical. Based on the data type, a histogram or bar chart will be shown for numerical or categorical data type respectively.
@@ -88,6 +94,8 @@ A scatter plot that plots the relationship between the selected fairness metric 
 Lastly, the page will compare the aforementioned fairness metrics of each feature selected for fairness assessment, providing users with useful mitigation approaches they can take towards fairer model development. After applying fairness mitigation, users can revisit this page with a new dataset and model for comparison against their previous iterations.
 
 ## Dataset: New York City (NYC) Subway Traffic
+
+Recognising the need for a demo, the New York City Subway Dataset which contains both neighbourhood census data and subway traffic data is used as an example. A PyTorch model is built using the dataset, then assessing the fairness the data and model predictions were done, followed by iterating through various mitigation approaches to build fairer models.
 
 The dataset we selected consists of subway traffic in NYC, along with neighborhood census data of the city. It is hosted on Kaggle by Edden, who has performed preprocessing steps to convert the raw data provided by The Metropolitan Transportation Authority (MTA), North America's largest transportation network. The census data is from NYU Furman Center's New York City Neighborhood Data Profiles and the neighborhood data is from University of Berkeley GeoData Library.
 
@@ -183,7 +191,7 @@ For example, "Unemployment Rate".
 
 
 ### Fairness Mitigation
-Based on our [Responsible AI Research](#responsible-ai-research), we have identified 2 approaches in mitigating bias, pre-processing the dataset and in-processing where we impose a fairness loss constraint during model training. 
+Based on our [Responsible AI Research](#responsible-ai-research), we have identified two approaches in mitigating bias, pre-processing the dataset and in-processing where we impose a fairness loss constraint during model training. 
 
 #### Pre-processing
 1. Supression<sup>17</sup>
@@ -232,6 +240,7 @@ Based on our [Responsible AI Research](#responsible-ai-research), we have identi
 15. [Pareto-Efficient Fairness for Skewed Subgroup Data](https://aiforsocialgood.github.io/icml2019/accepted/track1/pdfs/24_aisg_icml2019.pdf)
 16. [The Price of Fairness](https://core.ac.uk/download/pdf/4429576.pdf)
 17. [Data preprocessing techniques for classification without discrimination](https://link.springer.com/article/10.1007/s10115-011-0463-8)
+
 ## Acknowledgements
 
 Thanks to our friends at Mastercard (Apurva, Bharathi, Hui Chiang, Idaly and Louis) for their advice and guidance on AI fairness.
