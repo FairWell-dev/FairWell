@@ -136,7 +136,7 @@ st.title('FairWell')
 # Pages
 if page.lower() == 'guide':
     about = open('README.md', 'r', encoding='utf8')
-    about = about.read().replace('./images/','https://raw.githubusercontent.com/FairWell-dev/FairWell/main/images/')
+    about = about.read().replace('./images/','https://raw.githubusercontent.com/FairWell-dev/FairWell/main/images/')[12:]
     st.markdown(about, unsafe_allow_html=True)
 elif page.lower() == 'feature explorer':
     features_page.render(sidebar_handler)
