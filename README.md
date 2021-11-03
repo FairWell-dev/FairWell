@@ -33,7 +33,7 @@ More commonly, we identify bias based on decisions (i.e. predicitions) made by t
 
 - **Per Group Performance Fairness.** Another school of thought for fairness is the idea of per group performance. This school of thought attempts to maximise the utility of an individual group to attain fairness.<sup>13</sup> Examples include Pareto-fairness<sup>15</sup> and Rawlsian Max-Min fairness<sup>16</sup>.
 
-- **Causality Based Citeria.** These notions of fairness is distinct from the previous 3 definitions that are based on observational results. Causality based citeria, attempts to create connections amongst related variables to derive causal relationship of the problem. The relationship obtain can then be used to answer counter factual questions such as “what would have been the decision if that individual had a different gender?”.<sup>13</sup>
+- **Causality Based Criteria.** These notions of fairness is distinct from the previous 3 definitions that are based on observational results. Causality based citeria, attempts to create connections amongst related variables to derive causal relationship of the problem. The relationship obtain can then be used to answer counter factual questions such as “what would have been the decision if that individual had a different gender?”.<sup>13</sup>
 
 ### Responsible AI in Businesses
 
@@ -158,6 +158,8 @@ Target Variable: The current subway dataset has no clear target output. Hence, w
 ### Feature Engineering
 
 Feature Engineering was done on two columns: "Number of Stations" and "Neighborhood Area Size". "Number of Stations" is derived by grouping the subway data by neighborhood to find the number of unique stations in each neighborhood. "neighborhood Area Size" is derived from the original neighborhood census data columns: "Population" and "Population Density (1000 persons per square mile)".
+
+![](./images/Dataset.png)
 
 Lastly, we merged the two datasets together. Our final dataset contains the following features:
 
