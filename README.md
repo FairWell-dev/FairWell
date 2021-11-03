@@ -265,7 +265,8 @@ These features were binned into binary features by using the mean as the thresho
 ![](./images/Example%20-%20Data%20Fairness%20Assessment.PNG)
 
 ### Modelling with PyTorch
-Pytorch was then used to build a baseline neural network model.
+
+PyTorch was then used to build a baseline neural network model.
 
 The dataset we are working with is a 2-dimensional dataset, consisting of both spatial and temporal dimensions; also frequently known as "panel” data. Other approaches to similar problems often include more complex architectures involving LSTMs, CNNs or transformers. However, in this use case, we opted to keep things simple by using a standard multi-input feedforward network.
 
