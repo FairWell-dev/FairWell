@@ -259,15 +259,11 @@ def render(sidebar_handler):
                                                                                 subset=y_axis_metric))
 
             with col2:
-                combined_df_filtered['cum_perc'] = combined_df_filtered[y_axis_metric].cumsum() / combined_df_filtered[y_axis_metric].sum() * 100
-                fig, ax = plt.subplots(figsize=(5, 5))
-                ax.bar(combined_df_filtered['Feature'], combined_df_filtered[y_axis_metric])
-                ax.set_ylabel(y_axis_metric.title())
-                ax2 = ax.twinx()
-                ax2.plot(combined_df_filtered['Feature'], combined_df_filtered['cum_perc'], color='orange', marker='.')
-                ax2.yaxis.set_major_formatter(PercentFormatter())
-                ax2.set_ylabel('Cumulative Disparity (%)')
-                ax.xaxis.set_tick_params(rotation=90)
+                combined_df_filtered = combined_df_filtered.iloc[:10]
+                fig, ax = plt.subplots()
+                sns.barplot(x='Feature', y=y_axis_metric, data=combined_df_filtered, color='#4267B2')
+                plt.xticks(rotation=90)
+                plt.title('Top 10 Feature Disparity: ' + model_name)
                 st.pyplot(fig)
 
         st.subheader("Mitigation Recommendations: Bias Mitigation Techniques")
