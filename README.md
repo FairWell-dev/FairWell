@@ -194,19 +194,17 @@ Based on this analysis, we then identified a number of features that could be po
 
 In order to conduct fairness analysis on these potentially sensitive features, we then categorized the neighborhoods into privileged and underprivileged groups based on their characteristics against the average across all 51 neighborhoods. Specifically, these binary features were created:
 
-| Binary Feature  | Definition |
-| --------------------------------------- | -------------------------- |
-| Privileged: Higher Percent White | Neighborhood has a higher percentage of White population as compared to average |
-| Privileged: Lower Percent Asian | Neighborhood has a lower percentage of Asian population as compared to average |
-| Privileged: Lower Percent Hispanic | Neighborhood has a lower percentage of Hispanic population as compared to average |
-| Privileged: Lower Percent Black | Neighborhood has a lower percentage of Black population as compared to average |
-| Privileged: Higher Median household income (2018$) | Neighborhood has a higher median household income as compared to average |
-| Privileged: Lower Foreign-born population | Neighborhood has a lower percentage of foreign-born population as compared to average |
-| Privileged: Lower Poverty rate | Neighborhood has a lower poverty rate as compared to average |
-| Privileged: Lower Unemployment rate | Neighborhood has a lower unemployment rate as compared to average |
-| Privileged: Lower Severely rent-burdened households | Neighborhood has a lower number of severely rent-burdened households as compared to average |
-| Privileged: Lower Serious crime rate (per 1,000 residents) | Neighborhood has a lower serious crime rate as compared to average |
-| Privileged: Lower Disabled population | Neighborhood has a lower percentage of disabled population as compared to average |
+* Privileged: Higher Percent White
+* Privileged: Higher Median household income (2018$)
+* Privileged: Lower Percent Asian
+* Privileged: Lower Percent Hispanic
+* Privileged: Lower Percent Black
+* Privileged: Lower Foreign-born population
+* Privileged: Lower Poverty rate 
+* Privileged: Lower Unemployment rate
+* Privileged: Lower Severely rent-burdened households
+* Privileged: Lower Serious crime rate (per 1,000 residents)
+* Privileged: Lower Disabled population
 
 The binned dataset is then uploaded onto the **FairWell Data Fairness Assessment** page where all features were evaluated based on the Class Imbalance and Jensen-Shannon Divergence metrics for fairness. The features with the highest Jensen-Shannon Divergence were then identified for potential bias mitigation later on (more details covered in Fairness Mitigation section below).
 
