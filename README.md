@@ -317,6 +317,31 @@ All 4 of our trained models (1 baseline, 3 post-mitigation) were then again uplo
 
 The chart depicts the trade-off between accuracy and fairness, where generally models that are more accurate tend to also exhibit a larger amount of bias. The selection of which model to use is hence highly subjective and varies on a case-by-case basis, depending on the priorities of the project.
 
+To further illustrate how one might intepret the results from the chart above for the feature **Privileged: Lower Foreign-born population**. 
+
+#### Demographic Parity
+By using the mitigations steps described earlier, we observe that generally, there's a trade-off between accuracy and demographic parity. The baseline model is biased towards neighbourhoods with lower foreign born population. Comparing the selection rate, we can see that it is higher (0.611 vs 0.401) for neighbourhoods with lower foreign born population. 
+
+Comparing the selection rate for reweighing model and baseline, we can see that the reweighing model is less biased towards neighbourhoods with lower foreign born populations (0.545 vs 0.611). On the flip side, it is less biased against with neighbourhoods without lower foreign born populations (0.485 vs 0.401). Comparing the DP for both models, the model with reweighted data has lower DP compared to the baseline (0.060 vs 0.210). Both accuracy and disparity improved compared to the baseline.
+ 
+Comparing the selection rate for DP loss contrained model and baseline, we can see that the DP loss constrained model is less biased towards neighbourhoods with lower foreign born populations (0.473 vs 0.611). On the flip side, it is more biased against with neighbourhoods without lower foreign born populations (0.319 vs 0.401). Comparing the DP for both models, the model with DP loss constrain has lower DP compared to the baseline (0.154 vs 0.210). In this case, the accuracy decreased while the disparity increased.
+
+Although here we can observe that the undersampling bias mitigation technique has resulted in a higher DP than the baseline model. Comparing the DP for both models, the model with under sampled data has higher DP compared to the baseline (0.284 vs 0.210). Both accuracy and disparity decreased. 
+
+This showcases how bias mitigation techniques are subjective and requires an iterative process that acknowledges the trade offs between accuracy and fairness
+
+#### Equalised Odds
+
+Compared to the baseline model, the under sampling model and the DP loss constraint model performed worse off in accuracy. However, the reweighing model performed slightly better than the baseline.
+
+Looking at the EO disparity scores only the DP loss constrained model is fairer than the baseline model. 
+
+#### Predictive Parity
+
+Compared to the baseline model, all the models have higher PP disparity scores. 
+
+Looking at the PP disparity scores, the baseline model is the fairest model.
+
 ## Challenges
 
 Our implmentation process involved us utilising new technologies. Most of our team were new to PyTorch and the 60 minute tutorial helped us familiarise ourselves with the package. Our team had to research extensively on other new technologies such as StreamLit, FairTorch and AIF360 in a short period of time to implement into our solution. This was extremely time consuming and tedious as we had to dig into the documentation to discover the limitations of these tools and pivot our implementation plan accordingly.
