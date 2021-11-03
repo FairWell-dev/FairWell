@@ -24,14 +24,14 @@ The problem of defining and addressing fairness has been a topic of increasing i
    2. In-processing by imposing constraints during training
    3. Post-processing where the predictions of models are modified
 
-### Fairness Metrics
+### Fairness Assesment
 The first step to mitigating bias is measuring. In this work, we look at identifying the presence of bias in 2 locations: (i) bias in the data and (ii) bias in the predictions.
 
-#### Fairness Metrics (Data)
+#### Fairness Assesment (Data)
 
 The quality of data used will heavily influence the performance and fairness of the model. Therefore, identifying bias in the training data is an important step in weeding out potential biases. However, this assumes that historical bias and discrimination are not the root cause of bias in the data. Nonetheless, several model-independent metrics can be used to inform the user about the presence of bias and efforts can be made to reduce skewed data distributions. Examples include but not limited to class imbalance, Jensen-Shannon divergence, etc. <sup>1</sup>
 
-#### Fairness Metrics (Predictions)
+#### Fairness Assesment (Predictions)
 
 More commonly, we identify bias based on decisions (i.e. predicitions) made by the model after training (and bias mitigation). Generally, fairness decision definitions can be categorised into 4 areas, (i) individual, (ii) group, (iii) per group performance and (iv) causality based criteria.<sup>13</sup>
 
@@ -42,6 +42,44 @@ More commonly, we identify bias based on decisions (i.e. predicitions) made by t
 - **Per Group Performance Fairness.** Another school of thought for fairness is the idea of per group performance. This school of thought attempts to maximise the utility of an individual group to attain fairness.<sup>13</sup> Examples include Pareto-fairness<sup>15</sup> and Rawlsian Max-Min fairness<sup>16</sup>.
 
 - **Causality Based Criteria.** These notions of fairness is distinct from the previous 3 definitions that are based on observational results. Causality based citeria, attempts to create connections amongst related variables to derive causal relationship of the problem. The relationship obtain can then be used to answer counter factual questions such as “what would have been the decision if that individual had a different gender?”.<sup>13</sup>
+
+### Bias Mitigation
+After identiying bias, the next step would be to mitigate bias. In this work, we recommend 3 types of mitigation approaches: (i) pre-processing, (ii) in-processing (iii) post processing. 
+
+#### Pre-processing
+
+Pre-processing performs transformations on the raw dataset in an attempt to reduce bias within the data.
+
+**Suppression** Reduce discrimination between target and sensitive feature S by removing S and features highly correlated to S.
+- Remove sensitive features and their correlated features with [Fairlearn](https://fairlearn.org/v0.7.0/api_reference/fairlearn.preprocessing.html)
+
+**Re-weighing** Add a weights column to the dataset for each (feature group, label) combination to ensure dataset is fair before training - observations with higher weights should be prioritised ("seen more") by the model during training. 
+- Generate weights using the [API](https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.preprocessing.Reweighing.html#aif360.algorithms.preprocessing.Reweighing) from the [AI Fairness 360](https://aif360.readthedocs.io/) library.
+
+**Sampling**: Calculate sample sizes for each (sensitive feature, label) combination to reduce discrimination - oversample the minority groups and undersample the majority groups using Uniform Sampling and/or Preferential Sampling techniques
+- Generate synthetic data with Generative Adversarial Networks (GANs) [TorchGAN](https://torchgan.readthedocs.io/en/latest/index.html), [Mimicry](https://github.com/kwotsin/mimicry), [TF-GAN](https://github.com/tensorflow/gan)
+- Generate synthetic data with [Variational Autoencoder (VAE) with PyTorch](https://visualstudiomagazine.com/Articles/2021/05/06/variational-autoencoder.aspx)
+- SMOTE (Synthetic Minority Over-sampling Technique) using [imbalanced-learn](https://imbalanced-learn.org/stable/index.html)
+
+
+#### In-processing
+
+In-processing adds a contraint during the model training process to learn a fair model.
+
+**Fairness loss metrics**: Incorporate custom loss functions when training the model, making them a constraint
+- [FairTorch](https://github.com/wbawakate/fairtorch) applies group fairness (demographic parity and equalized odds) as losses for model training in PyTorch
+**Discrimination-aware Regularization**: Adding discrimination-aware regularization term to objective function
+- [AI Fairness 360](https://aif360.readthedocs.io/) provides an [API for model regularization](https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.inprocessing.PrejudiceRemover.html)
+
+#### Post-processing
+
+Post-processing transforms the model prediction such that the final decisions meet the desired fairness metrics while maximising accuracy.
+
+**Calibrated predictions**: Adjust model predictions to achieve equalized odds objective
+- [AI Fairness 360](https://aif360.readthedocs.io/) provides an API for calibrating scores
+
+**Per-subgroup threshold**: Optimise thresholds for each subgroup to achieve equalized odds
+- [AI Fairness 360](https://aif360.readthedocs.io/) provides an API for finding these probabilities
 
 ### Responsible AI in Businesses
 
