@@ -6,6 +6,12 @@
 
 https://fairwell-app.herokuapp.com/
 
+## How to Run Locally
+
+1. Clone this repository
+2. Run `pip install -r requirements.txt` to install the required dependencies
+3. Run `streamlit run app.py` and copy the URL to your web browser
+
 ***
 
 ## Introduction
