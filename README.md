@@ -70,7 +70,7 @@ FairWell is a tool that automates areas in the machine pipeline where fairness a
 
 ### Feature Explorer
 
-The feature explorer page allows users to quickly view the distributions of their dataset, as well as the summary statistics for each feature. An algorithm is created to quickly infer the data types of each feature, categorising them into either numerical or categorical. Based on the data type, a histogram or bar chart will be shown for numerical or categorical data type respectively.
+The feature explorer page allows users to quickly view the **distributions** of their dataset, as well as the **summary statistics** for each feature. An algorithm is created to quickly infer the data types of each feature, categorising them into either numerical or categorical. Based on the data type, a histogram or bar chart will be shown for numerical or categorical data type respectively.
 
 ### Data Fairness Assessment
 
@@ -78,32 +78,32 @@ The aim of the data fairness assessment page is to allow users to identify and e
 
 Users will first select the target feature of the dataset and features that they would like to evaluate for biases. They then select the specific metric that they wish to view as a plot in the comparison further down the page. Following this, the fairness metrics below will be calculated for each feature:
 
-- Class Imbalance (CI): Identifies any under representation of classes within the dataset
-- Jensen-Shannon Divergence (JS): Measures label imbalance between 2 classes by measuring their similiarity between their probability distributions
+- **Class Imbalance (CI)**: Identifies any under representation of classes within the dataset
+- **Jensen-Shannon Divergence (JS)**: Measures label imbalance between 2 classes by measuring their similiarity between their probability distributions
 
 A scatter plot which plots the selected fairness metric for each subgroup pairing within the feature is shown. All user uploaded datasets' metrics will be plotted on the same scatter plot to allow for ease of comparison.
 
-After implementing mitigation measures on the dataset, users can then upload the new dataset and view comparisons against previous iterations.
+After implementing mitigation measures on the dataset, users can then upload the new dataset and **view comparisons** against previous iterations.
 
 ### Model Bias Detection & Mitigation
 
-With a model, users can easily assess the fairness of their model's predictions with regard to the input dataset. The aim is to allow for identifying bias from the model after it is trained. Coupled with the previous page on fairness assessment on the data, users can identify if the source of bias comes from the data or model, or both.
+With a model, users can easily assess the fairness of their model's predictions with regard to the input dataset. The aim is to allow for identifying bias from the model after it is trained. Coupled with the previous page on fairness assessment on the data, users can identify the source of bias and investigate if comes from the data or model, or both.
 
-Users will first select the target feature from the dataset, along with the features they would like to evaluate for fairness. The inference process will then kick off for every model, returning predictions as outputs. With both the ground truth (target) and the predictions, each model's performance will be calculated, along the following fairness metrics for every feature:
+Users will first select the target feature from the dataset, along with the features they would like to evaluate for fairness. The inference process will then kick off for every model, returning predictions as outputs. With both the ground truth (target) and the predictions, **each model's performance will be calculated**, along the following fairness metrics for every feature:
 
-- Demographic Parity (DP): Measures the same positive prediction ratio across groups identified by the sensitive features.
-- Equalized Odds (EO): Measures the equality in terms of error rate. Same false positive rate and false negative rate across sensitive groups identified.
-- Predictive Parity (PP): Measures the error rates in terms of fraction of errors over the ground truth. The model should have the same precision across sensitive groups.
+- **Demographic Parity (DP)**: Measures the same positive prediction ratio across groups identified by the sensitive features.
+- **Equalized Odds (EO)**: Measures the equality in terms of error rate. Same false positive rate and false negative rate across sensitive groups identified.
+- **Predictive Parity (PP)**: Measures the error rates in terms of fraction of errors over the ground truth. The model should have the same precision across sensitive groups.
 
-A scatter plot that plots the relationship between the selected fairness metric and each model's performance will be shown. This is coupled with an expandable insights section, allowing users to evaluate the potential trade-offs from their models and fairness.
+A scatter plot that plots the **relationship between the selected fairness metric and each model's performance** will be shown. This is coupled with an expandable insights section, allowing users to evaluate the potential trade-offs from their models and fairness.
 
-Lastly, the page will compare the aforementioned fairness metrics of each feature selected for fairness assessment, providing users with useful mitigation approaches they can take towards fairer model development. After applying fairness mitigation, users can revisit this page with a new dataset and model for comparison against their previous iterations.
+Lastly, the page will compare the aforementioned fairness metrics of each feature selected for fairness assessment, providing users with useful **mitigation approaches** they can take towards fairer model development. After applying fairness mitigation, users can revisit this page with a new dataset and model for comparison against their previous iterations.
 
 ## Dataset: New York City (NYC) Subway Traffic
 
 Recognising the need for a demo, the New York City Subway Dataset which contains both neighbourhood census data and subway traffic data is used as an example. A PyTorch model is built using the dataset, then assessing the fairness the data and model predictions were done, followed by iterating through various mitigation approaches to build fairer models.
 
-The dataset we selected consists of subway traffic in NYC, along with neighborhood census data of the city. It is hosted on Kaggle by Edden, who has performed preprocessing steps to convert the raw data provided by The Metropolitan Transportation Authority (MTA), North America's largest transportation network. The census data is from NYU Furman Center's New York City Neighborhood Data Profiles and the neighborhood data is from University of Berkeley GeoData Library.
+The dataset we selected consists of subway traffic in NYC, along with neighbourhood census data of the city. It is hosted on Kaggle by Edden, who has performed preprocessing steps to convert the raw data provided by The Metropolitan Transportation Authority (MTA), North America's largest transportation network. The census data is from NYU Furman Center's New York City neighbourhood Data Profiles and the neighbourhood data is from University of Berkeley GeoData Library.
 
 ### Problem Statement
 
@@ -123,11 +123,11 @@ The baseline model is built for a time series binary classification problem to p
 
 ### Data preprocessing
 
-#### Neighborhood Census Data
+#### neighbourhood Census Data
 
-The neighborhood census data of the city consisted of a total of 87 columns, out of which we selected 15 columns to be included in the final dataset. Of these 15 columns, none contained missing data points.
+The neighbourhood census data of the city consisted of a total of 87 columns, out of which we selected 15 columns to be included in the final dataset. Of these 15 columns, none contained missing data points.
 
-* Neighborhood
+* neighbourhood
 * Car-free commute (% of commuters)
 * Disabled population
 * Foreign-born population
@@ -145,7 +145,7 @@ The neighborhood census data of the city consisted of a total of 87 columns, out
 
 #### Subway Data
 
-As the neighborhood census data was taken on June 2020, we selected 3 months worth of data from the subway data between April to June 2020, with the assumption that the neighborhood census remain consistent for these 3 months.
+As the neighbourhood census data was taken on June 2020, we selected 3 months worth of data from the subway data between April to June 2020, with the assumption that the neighbourhood census remain consistent for these 3 months.
 
 Missing values: The Subway Dataset has the following columns with missing data. Upon further evaluation of these columns, we decided to drop these two columns.
 
@@ -164,35 +164,35 @@ One Hot Encoding: One Hot Encoding was done for the following categorical column
 * Division
 * Structure
 * Borough
-* neighborhood
+* neighbourhood
 * EntriesExit (Binary Target)
 
-Target Variable: The current subway dataset has no clear target output. Hence, we want to aggregate the current "Entry" and "Exit" columns such that we can get a target binary column (EntriesExit) to represent the total amount of traffic for every station. We combine the current "Entry" and "Exit" columns by summing them up to aggregate the total number of people passing through the station in each 4 hr interval. We then find the median number of people passing through all the neighborhoods in each Datetime period. If EntriesExit value is greater than the median, we classify that it is crowded (1) and vice versa (0) to derive a binary target. We chose to split the column by median to ensure that our target would have a uniform (balanced) distribution.
+Target Variable: The current subway dataset has no clear target output. Hence, we want to aggregate the current "Entry" and "Exit" columns such that we can get a target binary column (EntriesExit) to represent the total amount of traffic for every station. We combine the current "Entry" and "Exit" columns by summing them up to aggregate the total number of people passing through the station in each 4 hr interval. We then find the median number of people passing through all the neighbourhoods in each Datetime period. If EntriesExit value is greater than the median, we classify that it is crowded (1) and vice versa (0) to derive a binary target. We chose to split the column by median to ensure that our target would have a uniform (balanced) distribution.
 
 ### Feature Engineering
 
-Feature Engineering was done on two columns: "Number of Stations" and "Neighborhood Area Size". "Number of Stations" is derived by grouping the subway data by neighborhood to find the number of unique stations in each neighborhood. "neighborhood Area Size" is derived from the original neighborhood census data columns: "Population" and "Population Density (1000 persons per square mile)".
+Feature Engineering was done on two columns: "Number of Stations" and "neighbourhood Area Size". "Number of Stations" is derived by grouping the subway data by neighbourhood to find the number of unique stations in each neighbourhood. "neighbourhood Area Size" is derived from the original neighbourhood census data columns: "Population" and "Population Density (1000 persons per square mile)".
 
 ![](./images/Dataset.png)
 
 Lastly, we merged the two datasets together. Our final dataset contains the following features:
 
-| Features from Neighborhood Census Data  | Features from Subway Data<sup>a</sup> |
+| Features from neighbourhood Census Data  | Features from Subway Data<sup>a</sup> |
 | --------------------------------------- | -------------------------- |
-| Neighborhood<br>Car-free commute (% of commuters)<br>Disabled population<br>Foreign-born population<br>Median household income (2018\$)<br>Median rent, all (2018$)<br>Percent Asian<br>Percent Hispanic<br>Percent Black<br>Percent white<br>Population<sup>c</sup><br>Poverty rate<br>Public housing (% of rental units)<br>Unemployment rate<br>Residential units within 12 mile of a subway station<br>Population density (1,000 persons per square mile)<sup>c</sup><br>Serious crime rate (per 1,000 residents)<br>Severely rent-burdened households<br>Rental vacancy rate<br>Mean travel time to work (minutes)| Datetime<br>Stop Name<br>Connecting Lines<sup>b</sup><br>Division<sup>b</sup><br>Structure<sup>b</sup><br>Borough<sup>b</sup><br>Neighborhood<br>Entries<sup>d</sup><br>Exits<sup>d</sup> |
+| neighbourhood<br>Car-free commute (% of commuters)<br>Disabled population<br>Foreign-born population<br>Median household income (2018\$)<br>Median rent, all (2018$)<br>Percent Asian<br>Percent Hispanic<br>Percent Black<br>Percent white<br>Population<sup>c</sup><br>Poverty rate<br>Public housing (% of rental units)<br>Unemployment rate<br>Residential units within 12 mile of a subway station<br>Population density (1,000 persons per square mile)<sup>c</sup><br>Serious crime rate (per 1,000 residents)<br>Severely rent-burdened households<br>Rental vacancy rate<br>Mean travel time to work (minutes)| Datetime<br>Stop Name<br>Connecting Lines<sup>b</sup><br>Division<sup>b</sup><br>Structure<sup>b</sup><br>Borough<sup>b</sup><br>neighbourhood<br>Entries<sup>d</sup><br>Exits<sup>d</sup> |
 
 <sup>a</sup> Used to derive "Number of Stations" feature <br>
 <sup>b</sup> One hot encoded features <br>
-<sup>c</sup> Used to derive ""Neighborhood Area Size"" feature <br>
+<sup>c</sup> Used to derive ""neighbourhood Area Size"" feature <br>
 <sup>d</sup> Used to derive "EntriesExits" target feature
 
 ### Data Fairness Assessment
 
 Recall that bias can occur in the data even prior to training a model. To identify potential bias arising from data, we pass our cleansed dataset into the **FairWell Featurer Explorer** page, to generate the distributions and statistics of our dataset.
 
-Based on this analysis, we then identified a number of features that could be potentially sensitive. For example, we noticed that some neighborhoods had as much as 74.1% of the population made up of Hispanic citizens, while others had as little as 3.7%. This large disparity in values could be a point of concern.
+Based on this analysis, we then **identified a number of features that could be potentially sensitive**. For example, we noticed that some neighbourhoods had as much as 74.1% of the population made up of Hispanic citizens, while others had as little as 3.7%. This large disparity in values could be a point of concern.
 
-In order to conduct fairness analysis on these potentially sensitive features, we then categorized the neighborhoods into privileged and underprivileged groups based on their characteristics against the average across all 51 neighborhoods. Specifically, these binary features were created:
+In order to conduct fairness analysis on these potentially sensitive features, we then categorized the neighbourhoods into privileged and underprivileged groups based on their characteristics against the average across all 51 neighbourhoods. Specifically, these binary features were created:
 
 * Privileged: Higher Percent White
 * Privileged: Higher Median household income (2018$)
@@ -206,42 +206,56 @@ In order to conduct fairness analysis on these potentially sensitive features, w
 * Privileged: Lower Serious crime rate (per 1,000 residents)
 * Privileged: Lower Disabled population
 
-The binned dataset is then uploaded onto the **FairWell Data Fairness Assessment** page where all features were evaluated based on the Class Imbalance and Jensen-Shannon Divergence metrics for fairness. The features with the highest Jensen-Shannon Divergence were then identified for potential bias mitigation later on (more details covered in Fairness Mitigation section below).
+These features were binned into binary features by using the mean as the threshold. The binned dataset is then uploaded onto the **FairWell Data Fairness Assessment** page where all features were evaluated based on the Class Imbalance and Jensen-Shannon Divergence metrics for fairness. The features with the highest Jensen-Shannon Divergence were then identified for potential bias mitigation later on (more details covered in Fairness Mitigation section below).
 
 ![](./images/Example%20-%20Data%20Fairness%20Assessment.PNG)
 
 ### Modelling with PyTorch
 
 
-
 ### Fairness Assessment on Model Predictions
-The baseline trained model, testing dataset and feature list were then uploaded onto the **FairWell Model Bias Detection & Mitigation** page. Inference is then run automatically within the FairWell environment to generate the following fairness metrics for our baseline model predictions: Demographic Parity, Equalized Odds and Predictive Parity.
 
-![](./images/Example%20-%20Mitigation%20Recommendations.PNG)
+The baseline trained model, testing dataset and feature list were then uploaded onto the **FairWell Model Bias Detection & Mitigation** page. Inference is then run automatically within the FairWell environment to generate the following fairness metrics for our baseline model predictions: Demographic Parity, Equalized Odds and Predictive Parity. Here, the metric we focused on is Demographic Parity, making sure each subgroup receives a positive outcome at an equal rate.
+
+![](./images/Baseline%20Fairness%20Metrics%20on%20Predictions.PNG)
 
 Based on our assessment of both data fairness and model fairness, we narrowed down to a list of features that exhibited both high Jensen-Shannon Divergence and high Demographic Parity disparity. On the top of that list was the **Privileged: Lower Foreign-born population** feature, with a score of 0.0264 max Jensen-Shannon Divergence and 0.2251 Demographic Parity.
 
+With **Privileged: Lower Foreign-born population** as the sensitive feature, undersampling was applied to the dataset (pre-processing mitigation) and demographic parity loss (in-processing mitigation) was utilised during model training. The mitigation approaches are applied separately, thus the resulting datasets and models are independent of each other.
+
+![](./images/Undersampling%20Fairness%20Metrics%20on%20Predictions.PNG)
+
+![](./images/Fairtorch%20Fairness%20Metrics%20on%20Predictions.PNG)
+
+Comparing Demographic Parity, the undersampled dataset did not perform as well on the sensitive feature, with a higher Demographic Parity score of 0.284. This could be attributed to a small number (about 50) of neighbourhoods, which can in turn affect the undersampling technique utilised.
+
+
+
 ### Fairness Mitigation
+
 Based on our [Responsible AI Research](#responsible-ai-research), we have identified two approaches in mitigating bias, pre-processing the dataset and in-processing where we impose a fairness loss constraint during model training. In our example use case, we tried 3 of those approaches.
 
 #### Pre-processing
+
 1. Reweighing<sup>17</sup>
    - In this approach, we used IBM's AI Fairness 360 package to generate weights for each (sensitive feature, label) pair and assigned them to each observation.
    - These per-sample weights were then passed into the model and computed as part of the loss function, allowing the model to prioritize certain observations during training.
    - Link to notebook
 
 2. Under-sampling<sup>17</sup>
-   - In this approach we used the Imbalanced Learn package to correct class imbalance in the sensitive feature by randomly undersampling neighborhoods belonging to the majority class. This was done in order to ensure an equal representation in both privileged and underprivileged groups.
+   - In this approach we used the Imbalanced Learn package to correct class imbalance in the sensitive feature by randomly undersampling neighbourhoods belonging to the majority class. This was done in order to ensure an equal representation in both privileged and underprivileged groups.
    - The undersampled dataset was then fed into the model.
    - Link to notebook
 
 #### In-processing
+
 1. Fairness loss constraint
    - In this approach, we borrowed the work of the FairTorch team to incorporate a group-fairness constraint into our loss function, allowing the model to optimize on a combination of both BCELoss and Demographic Parity.
    - For our example model, a value of alpha=0.5 was identified to achieve the best balance between the two.
    - Link to notebook
  
 ### Effect of Mitigation Approach
+
 All 4 of our trained models (1 baseline, 3 post-mitigation) were then again uploaded onto the FairWell Model Bias Detection & Mitigation page, for a side-of-side comparison of the models' metrics.
 
 ![](./images/Example%20-%20Mitigated%20Models%20Comparison.PNG)
@@ -249,6 +263,7 @@ All 4 of our trained models (1 baseline, 3 post-mitigation) were then again uplo
 The chart depicts the trade-off between accuracy and fairness, where generally models that are more accurate tend to also exhibit a larger amount of bias. The selection of which model to use is hence highly subjective and varies on a case-by-case basis, depending on the priorities of the project.
 
 ## Tools and Technologies Used
+
 - PyTorch
 - <img src="https://streamlit.io/images/brand/streamlit-mark-color.png" width="20"/> [Streamlit](https://streamlit.io/)
 - [Microsoft Fairlearn](https://fairlearn.org/)

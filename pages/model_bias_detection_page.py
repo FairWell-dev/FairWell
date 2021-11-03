@@ -317,7 +317,7 @@ def render(sidebar_handler):
                     - [FairTorch](https://github.com/wbawakate/fairtorch) applies group fairness \
                     (demographic parity and equalized odds) as losses for model training in PyTorch
                 - Discrimination-aware Regularization: Adding discrimination-aware regularization term to objective function
-                    - - [AI Fairness 360](https://aif360.readthedocs.io) \
+                    - [AI Fairness 360](https://aif360.readthedocs.io) \
                     provides an [API for adding regularization the model](https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.inprocessing.PrejudiceRemover.html)
             """.format())
 
