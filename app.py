@@ -135,7 +135,7 @@ st.title('FairWell')
 
 # Pages
 if page.lower() == 'guide':
-    about = open('README.md', 'r')
+    about = open('README.md', 'r', encoding='utf8')
     st.markdown(about.read())
 elif page.lower() == 'feature explorer':
     features_page.render(sidebar_handler)
