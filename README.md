@@ -125,8 +125,8 @@ The neighborhood census data of the city consisted of a total of 87 columns, out
 * Car-free commute (% of commuters)
 * Disabled population
 * Foreign-born population
-* Median household income (2018$)
-* Median rent, all (2018$)
+* Median household income (2018\$)
+* Median rent, all (2018\$)
 * Moderately rent-burdened households
 * Percent Asian
 * Percent Hispanic
