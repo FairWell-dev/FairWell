@@ -106,6 +106,14 @@ FairWell is a tool that automates areas in the machine pipeline where fairness a
 
 ![](./images/FairWell%20Focus%20on%20Pipeline.png)
 
+Users can upload their datasets and models to integrate FairWell into their machine learning pipelines to build responsibile AI Models:
+
+- Feature Explorer: Dataset in CSV file format
+- Data Fairness Assessment: Dataset in CSV file format
+- Model Bias Detection & Mitigation: Set of (Test Data, Model, Feature List) in (CSV, PT, JSON) file formats respectively. All files in a set must have the same file name.
+
+_Processing of file upload on heroku application might take some time._
+
 ### Feature Explorer
 
 The feature explorer page allows users to quickly view the **distributions** of their dataset, as well as the **summary statistics** for each feature. An algorithm is created to quickly infer the data types of each feature, categorising them into either numerical or categorical. Based on the data type, a histogram or bar chart will be shown for numerical or categorical data type respectively.
@@ -309,6 +317,33 @@ All 4 of our trained models (1 baseline, 3 post-mitigation) were then again uplo
 
 The chart depicts the trade-off between accuracy and fairness, where generally models that are more accurate tend to also exhibit a larger amount of bias. The selection of which model to use is hence highly subjective and varies on a case-by-case basis, depending on the priorities of the project.
 
+## Challenges
+
+Our implmentation process involved us utilising new technologies. Most of our team were new to PyTorch and the 60 minute tutorial helped us familiarise ourselves with the package. Our team had to research extensively on other new technologies such as StreamLit, FairTorch and AIF360 in a short period of time to implement into our solution. This was extremely time consuming and tedious as we had to dig into the documentation to discover the limitations of these tools and pivot our implementation plan accordingly.
+
+We did not have a subject matter expert on AI Fairness in our team, thus we had dive deep into documentations on the topic. Sieving through all the resources available posed a challenge without an SME to validate our findings. Even after we have gained a fair understanding of AI Fairness, we have found that the topic itself is subjective. Fairness assessment is specific to each use case. Fairness does not have one single definition and varies accross different situations and scenarios. This poses as a challenge when researching on the various metrics and mathematics involved in assessing bias. This took many iterations of trial and error with different technologies, even to the point of implementing the mathetical formulae from scratch. 
+
+
+## Accomplishments
+
+We created a framework for building Responsible Machine Learning Models, providing structure to the subjective process of integrating fairness into machine learning pipelines. Furthermore, with our fully functional, user-friendly, and intepretable web application, we have made AI Fairness accessible to all. 
+
+
+## Conclusion and Future Work
+
+FairWell provides a hollistic approach to incorporating Responsible AI practices into their machine learning workflows. We will continue to interate and improve on FairWell in future. This includes making FairWell available for multiclass classification and regression problems, expanding supported machine learning libraries beyond PyTorch, and automating model building and tuning. With FairWell, we aim to make all models fair and well, so you can bid farewell to unknown model bias.
+
+
+## Conclusion and Future Work
+
+- Mention all is fair and well
+
+- Work on multiclass classification and regression problems
+- Integrate with other machine learning libraries (e.g. sklearn, TensorFlow)
+- Automate model building and tuning
+
+
+
 ## Tools and Technologies Used
 
 - PyTorch
@@ -319,22 +354,6 @@ The chart depicts the trade-off between accuracy and fairness, where generally m
 - Data Science packages (NumPy, Pandas, Plotly)
 - Heroku
 
-What we have learnt:
-
-
-## Challenges/Limitations
-
-
-## Accomplishments
-
-
-## Conclusion and Future Work
-
-- Mention all is fair and well
-
-- Work on multiclass classification and regression problems
-- Integrate with other machine learning libraries (e.g. sklearn, TensorFlow)
-- Automate model building and tuning
 
 ## References
 
