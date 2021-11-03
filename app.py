@@ -136,7 +136,8 @@ st.title('FairWell')
 # Pages
 if page.lower() == 'guide':
     about = open('README.md', 'r', encoding='utf8')
-    st.markdown(about.read())
+    about = about.read().replace('./images/','https://raw.githubusercontent.com/FairWell-dev/FairWell/main/images/')
+    st.markdown(about, unsafe_allow_html=True)
 elif page.lower() == 'feature explorer':
     features_page.render(sidebar_handler)
 elif page.lower() == 'data fairness assessment':
