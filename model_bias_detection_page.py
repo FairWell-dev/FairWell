@@ -228,7 +228,7 @@ def render(sidebar_handler):
                 
                 st.markdown(insights_description.format(min_loss, max_loss, min_disparity, max_disparity,
                                                      highest_acc, highest_acc_disparity,
-                                                     lowest_disparity, lowest_disparity_acc))
+                                                     lowest_disparity_acc, lowest_disparity))
 
         
         st.subheader(y_axis_metric.title() + ' across Models')
