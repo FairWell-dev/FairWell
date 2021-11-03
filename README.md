@@ -186,44 +186,68 @@ Lastly, we merged the two datasets together. Our final dataset contains the foll
 <sup>c</sup> Used to derive ""Neighborhood Area Size"" feature <br>
 <sup>d</sup> Used to derive "EntriesExits" target feature
 
-### Fairness Assessment on Dataset
-Recall that bias can occur in the data even prior to training a model. To simplfy the assessment process, we first bin the continuous features into binary categories based on their average values. 
-For example, "Unemployment Rate".
+### Data Fairness Assessment
 
-The binned dataset is then uploaded onto the FairWell Data Fairness Assessment page where all features were evaluated based on the Class Imbalance and Jensen-Shannon Divergence metrics for fairness. The features with high Class Imbalance and Jensen-Shannon Divergence were selected and pre-processing fairness mitigation is done on these features (details covered in Fairness Mitigation section below).
+Recall that bias can occur in the data even prior to training a model. To identify potential bias arising from data, we pass our cleansed dataset into the **FairWell Featurer Explorer** page, to generate the distributions and statistics of our dataset.
+
+Based on this analysis, we then identified a number of features that could be potentially sensitive. For example, we noticed that some neighborhoods had as much as 74.1% of the population made up of Hispanic citizens, while others had as little as 3.7%. This large disparity in values could be a point of concern.
+
+In order to conduct fairness analysis on these potentially sensitive features, we then categorized the neighborhoods into privileged and underprivileged groups based on their characteristics against the average across all 51 neighborhoods. Specifically, these binary features were created:
+
+| Binary Feature  | Definition |
+| --------------------------------------- | -------------------------- |
+| Privileged: Higher Percent White | Neighborhood has a higher percentage of White population as compared to average |
+| Privileged: Lower Percent Asian | Neighborhood has a lower percentage of Asian population as compared to average |
+| Privileged: Lower Percent Hispanic | Neighborhood has a lower percentage of Hispanic population as compared to average |
+| Privileged: Lower Percent Black | Neighborhood has a lower percentage of Black population as compared to average |
+| Privileged: Higher Median household income (2018$) | Neighborhood has a higher median household income as compared to average |
+| Privileged: Lower Foreign-born population | Neighborhood has a lower percentage of foreign-born population as compared to average |
+| Privileged: Lower Poverty rate | Neighborhood has a lower poverty rate as compared to average |
+| Privileged: Lower Unemployment rate | Neighborhood has a lower unemployment rate as compared to average |
+| Privileged: Lower Severely rent-burdened households | Neighborhood has a lower number of severely rent-burdened households as compared to average |
+| Privileged: Lower Serious crime rate (per 1,000 residents) | Neighborhood has a lower serious crime rate as compared to average |
+| Privileged: Lower Disabled population | Neighborhood has a lower percentage of disabled population as compared to average |
+
+The binned dataset is then uploaded onto the **FairWell Data Fairness Assessment** page where all features were evaluated based on the Class Imbalance and Jensen-Shannon Divergence metrics for fairness. The features with the highest Jensen-Shannon Divergence were then identified for potential bias mitigation later on (more details covered in Fairness Mitigation section below).
 
 ### Modelling with PyTorch
 
 
-### Fairness Assessment on Model Predictions
 
+### Fairness Assessment on Model Predictions
+With a baseline model trained successfully, we then uploaded the trained model, testing dataset and feature list onto the **FairWell Model Bias Detection & Mitigation** page. Inference is then run automatically within the FairWell environment to generate the following metrics for our baseline model: Demographic Parity, Equalized Odds and Predictive Parity.
+
+Again, we take the top 5 features with the highest Demographic Parity to focus on for potential bias mitigation.
+
+Based on our assessment of both data biasand model bias, we narrowed down to a list of features that exhibited both high JS divergence and high DP disparity. On the top of that list was the Privileged: Lower Foreign-born population feature, with a score of 0.0264 max Jensen-Shannon Divergence and 0.2251 Demographic Parity.
 
 ### Fairness Mitigation
 Based on our [Responsible AI Research](#responsible-ai-research), we have identified two approaches in mitigating bias, pre-processing the dataset and in-processing where we impose a fairness loss constraint during model training. 
 
 #### Pre-processing
-1. Supression<sup>17</sup>
-   - In this approach we naively dropped protected features and their closely corelated features in an attempt to hide these features from the model. 
-   - In this dataset we found that feature X is closely corelated to features A, B and C. Thus we decided to supress these features by removing them from the training dataset.
-2. Under sampling<sup>17</sup>
-   - In this approach we first identified 
+1. Reweighing<sup>17</sup>
+   - In this approach, we used IBM's AI Fairness 360 package to generate weights for each (label, sensitive feature) pair
+   - These per-sample weights were then passed into the model and computed as part of the loss function.
 
-
-3. Reweighing<sup>17</sup>
-   - In this approach, we took the 
+2. Under-sampling<sup>17</sup>
+   - In this approach we used the Imbalanced Learn package to randomly undersample neighborhoods based on sensitive features, in order to ensure an equal representation in both privileged and underprivileged groups.
+   - This undersampled dataset was then fed into the model.
 
 #### In-processing
 1. Fairness loss constraint
-
+   - In this approach, we borrowed the work of the FairTorch team, to add a fairness loss constraint based on Demographic Parity (DemographicParityLoss). 
 
 ### Effect of Mitigation Approach
+All 4 of our trained models (1 baseline, 3 post-mitigation) were then again uploaded onto the FairWell Model Bias Detection & Mitigation page, for a side-of-side comparison of the models' metrics, both in terms of accuracy and in terms of fairness.
+
+
 
 ## Tools and Technologies Used
 - PyTorch
 - <img src="https://streamlit.io/images/brand/streamlit-mark-color.png" width="20"/> [Streamlit](https://streamlit.io/)
 - [Microsoft Fairlearn](https://fairlearn.org/)
 - [AI Fairness 360](https://aif360.mybluemix.net/)
-- FairTorch
+- [FairTorch](https://github.com/wbawakate/fairtorch)
 - Data Science packages (NumPy, Pandas, Plotly)
 - Heroku
 
