@@ -265,7 +265,25 @@ These features were binned into binary features by using the mean as the thresho
 ![](./images/Example%20-%20Data%20Fairness%20Assessment.PNG)
 
 ### Modelling with PyTorch
+Pytorch was then used to build a baseline neural network model.
 
+The dataset we are working with is a 2-dimensional dataset, consisting of both spatial and temporal dimensions; also frequently known as "panel” data. Other approaches to similar problems often include more complex architectures involving LSTMs, CNNs or transformers. However, in this use case, we opted to keep things simple by using a standard multi-input feedforward network.
+
+There are 2 main reasons behind this decision. Firstly, since the inference process is done via the FairWell process (on a browser), we wanted to keep inference time to a minimum. Secondly, as we were dealing with only 3 months worth of data, each neighborhood only had 546 timesteps of data. In addition, our analysis had shown that the time series data exhibited strong trends of seasonality, which meant that feature extraction would be likely sufficient.
+
+Hence, we extracted 3 time series features `(day, day of week, hour)` from the original timestamp column, and used those as inputs into the model.
+
+As for the spatial dimension, we label encoded the names of each neighborhood, and passed that column into an Embedding layer with dimensions = 51. This Embedding layer will allow the model to learn connections between the different neighborhoods and naturally cluster similar neighborhoods together.
+
+The resultant high level model architecture is as below:
+![](./images/Model%20Architecture.png)
+
+After a couple of rounds of hyperparameter tuning, we settled on this set of hyperparameters:
+* batch_size=32, 
+* max_epochs = 100,
+* lr = 0.005
+
+The notebook for data preparation and model training can be found here. 
 
 ### Fairness Assessment on Model Predictions
 
