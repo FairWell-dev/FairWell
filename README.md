@@ -24,14 +24,14 @@ The problem of defining and addressing fairness has been a topic of increasing i
    2. In-processing by imposing constraints during training
    3. Post-processing where the predictions of models are modified
 
-### Fairness Assesment
+### Fairness Assessment
 The first step to mitigating bias is measuring. In this work, we look at identifying the presence of bias in 2 locations: (i) bias in the data and (ii) bias in the predictions.
 
-#### Fairness Assesment (Data)
+#### Fairness Assessment (Data)
 
 The quality of data used will heavily influence the performance and fairness of the model. Therefore, identifying bias in the training data is an important step in weeding out potential biases. However, this assumes that historical bias and discrimination are not the root cause of bias in the data. Nonetheless, several model-independent metrics can be used to inform the user about the presence of bias and efforts can be made to reduce skewed data distributions. Examples include but not limited to class imbalance, Jensen-Shannon divergence, etc. <sup>1</sup>
 
-#### Fairness Assesment (Predictions)
+#### Fairness Assessment (Predictions)
 
 More commonly, we identify bias based on decisions (i.e. predicitions) made by the model after training (and bias mitigation). Generally, fairness decision definitions can be categorised into 4 areas, (i) individual, (ii) group, (iii) per group performance and (iv) causality based criteria.<sup>13</sup>
 
@@ -106,7 +106,7 @@ FairWell is a tool that automates areas in the machine pipeline where fairness a
 
 ![](./images/FairWell%20Focus%20on%20Pipeline.png)
 
-Users can upload their datasets and models to integrate FairWell into their machine learning pipelines to build responsibile AI Models:
+Users can upload their datasets and models to integrate FairWell into their machine learning pipelines:
 
 - Feature Explorer: Dataset in CSV file format
 - Data Fairness Assessment: Dataset in CSV file format
@@ -332,16 +332,6 @@ We created a framework for building Responsible Machine Learning Models, providi
 ## Conclusion and Future Work
 
 FairWell provides a hollistic approach to incorporating Responsible AI practices into their machine learning workflows. We will continue to interate and improve on FairWell in future. This includes making FairWell available for multiclass classification and regression problems, expanding supported machine learning libraries beyond PyTorch, and automating model building and tuning. With FairWell, we aim to make all models fair and well, so you can bid farewell to unknown model bias.
-
-
-## Conclusion and Future Work
-
-- Mention all is fair and well
-
-- Work on multiclass classification and regression problems
-- Integrate with other machine learning libraries (e.g. sklearn, TensorFlow)
-- Automate model building and tuning
-
 
 
 ## Tools and Technologies Used
