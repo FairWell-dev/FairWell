@@ -42,6 +42,14 @@ def predictive_parity_difference(y_true, y_pred, sensitive_feature):
         
     return max(pps) - min(pps)
 
+
+def infer_target_col(cols):
+    for idx, col in reversed(list(enumerate(cols))):
+        if ('predict' not in col) and ('target' in col) or ('label' in col):
+            return idx
+    return len(cols) - 1 # Assume right most column is target
+
+
 def render(sidebar_handler):
     # Sidebar
     eg_dict = {
@@ -68,7 +76,10 @@ def render(sidebar_handler):
     with col1:
         target = st.selectbox('Target feature (categorical)', 
                               options=[col for col in df.columns
-                                       if (dtype_dict[col] == 'categorical')])
+                                       if (dtype_dict[col] == 'categorical')],
+                              index=infer_target_col(
+                                        [col for col in df.columns
+                                         if (dtype_dict[col] == 'categorical')]))
 
         prediction = target + '_prediction'
 
@@ -83,6 +94,10 @@ def render(sidebar_handler):
                                         (features with >10 subgroups will not be shown)', 
                                         options=all_cols_to_eval,
                                         default=all_cols_to_eval)
+        elif selected.lower() == 'baseline model':
+            cols_to_eval = container.multiselect('Features to evaluate (select one or more)',
+                                            all_cols_to_eval,
+                                            [col for col in all_cols_to_eval if col.startswith('Privileged')])
         else:
             cols_to_eval = container.multiselect('Categorical features to evaluate for fairness \
                                         (features with >10 subgroups will not be shown)', 
