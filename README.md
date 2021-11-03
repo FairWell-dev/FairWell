@@ -6,6 +6,8 @@
 
 https://fairwell-app.herokuapp.com/
 
+***
+
 ## Introduction
 
 FairWell is a Responsible AI tool developed using Streamlit. The aim is to address model biasness on specific groups of people, allowing data scientists to evaluate their dataset and model predictions, and take steps toward making their datasets more inclusive and their models less biased. The tool allows users to detect fairness issues in both datasets and models, and in turn, get inspiration on various mitigation approaches through mitigation recommendations.
@@ -81,6 +83,8 @@ Post-processing transforms the model prediction such that the final decisions me
 **Per-subgroup threshold**: Optimise thresholds for each subgroup to achieve equalized odds
 - [AI Fairness 360](https://aif360.readthedocs.io/) provides an API for finding these probabilities
 
+***
+
 ### Responsible AI in Businesses
 
 Businesses have recognised the need to develop AI models that are responsible and fair towards their data inputs. 
@@ -99,6 +103,8 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 - Robustness & Safety
 - Transparency & Control
 - Accountability & Governance
+
+***
 
 ## FairWell
 
@@ -144,6 +150,8 @@ Users will first select the target feature from the dataset, along with the feat
 A scatter plot that plots the **relationship between the selected fairness metric and each model's performance** will be shown. This is coupled with an expandable insights section, allowing users to evaluate the potential trade-offs from their models and fairness.
 
 Lastly, the page will compare the aforementioned fairness metrics of each feature selected for fairness assessment, providing users with useful **mitigation approaches** they can take towards fairer model development. After applying fairness mitigation, users can revisit this page with a new dataset and model for comparison against their previous iterations.
+
+***
 
 ## Dataset: New York City (NYC) Subway Traffic
 
@@ -317,6 +325,8 @@ All 4 of our trained models (1 baseline, 3 post-mitigation) were then again uplo
 
 The chart depicts the trade-off between accuracy and fairness, where generally models that are more accurate tend to also exhibit a larger amount of bias. The selection of which model to use is hence highly subjective and varies on a case-by-case basis, depending on the priorities of the project.
 
+***
+
 ## Challenges
 
 Our implmentation process involved us utilising new technologies. Most of our team were new to PyTorch and the 60 minute tutorial helped us familiarise ourselves with the package. Our team had to research extensively on other new technologies such as StreamLit, FairTorch and AIF360 in a short period of time to implement into our solution. This was extremely time consuming and tedious as we had to dig into the documentation to discover the limitations of these tools and pivot our implementation plan accordingly.
@@ -333,6 +343,7 @@ We created a framework for building Responsible Machine Learning Models, providi
 
 FairWell provides a hollistic approach to incorporating Responsible AI practices into their machine learning workflows. We will continue to interate and improve on FairWell in future. This includes making FairWell available for multiclass classification and regression problems, expanding supported machine learning libraries beyond PyTorch, and automating model building and tuning. With FairWell, we aim to make all models fair and well, so you can bid farewell to unknown model bias.
 
+***
 
 ## Tools and Technologies Used
 
