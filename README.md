@@ -1,5 +1,11 @@
 # FairWell
 
+## Try it out
+
+<a href="https://fairwell-app.herokuapp.com/"><img src="https://brand.heroku.com/static/media/heroku-logotype-horizontal.81c49462.svg" width="200"/></a>
+
+https://fairwell-app.herokuapp.com/
+
 ## Introduction
 
 FairWell is a Responsible AI tool developed using Streamlit. The aim is to address model biasness on specific groups of people, allowing data scientists to evaluate their dataset and model predictions, and take steps toward making their datasets more inclusive and their models less biased. The tool allows users to detect fairness issues in both datasets and models, and in turn, get inspiration on various mitigation approaches through mitigation recommendations.
@@ -58,7 +64,7 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 
 ## FairWell
 
-FairWell automates areas in the machine pipeline where fairness assessment and mitigation can be automated, to reduce friction faced by data scientists when developing Responsible AI models.
+FairWell is a tool that automates areas in the machine pipeline where fairness assessment and mitigation can be automated, to reduce friction faced by data scientists when developing Responsible AI models.
 
 ![](./images/FairWell%20Focus%20on%20Pipeline.png)
 
@@ -217,9 +223,15 @@ Based on our [Responsible AI Research](#responsible-ai-research), we have identi
 - [AI Fairness 360](https://aif360.mybluemix.net/)
 - FairTorch
 - Data Science packages (NumPy, Pandas, Plotly)
+- Heroku
 
 ## Conclusion and Future Work
 
+- Mention all is fair and well
+
+- Work on multiclass classification and regression problems
+- Integrate with other machine learning libraries (e.g. sklearn, TensorFlow)
+- Automate model building and tuning
 
 ## References
 
