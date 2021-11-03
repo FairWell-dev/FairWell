@@ -45,8 +45,10 @@ def predictive_parity_difference(y_true, y_pred, sensitive_feature):
 def render(sidebar_handler):
     # Sidebar
     eg_dict = {
-        'Baseline Model': 'data/Baseline Model.csv',
-        'Bias Mitigated Model - AIF360': 'data/Bias Mitigated Model - AIF360.csv'
+        'Baseline Model': 'data/pred_basemodel_1103.csv',
+        'Bias Mitigated - Undersampling Model': 'data/pred_undersampling_1103.csv',
+        'Bias Mitigated - Reweighing Model' : 'data/pred_reweighing_1103.csv',
+        'Bias Mitigated - FairTorch Model': 'data/pred_fairtorch_1103.csv'
     }
 
     pred_df_dict, selected = sidebar_handler('Test Dataset(s) and Model(s) for Bias Detection', 

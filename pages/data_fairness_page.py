@@ -77,8 +77,8 @@ def get_metric(target, df, col):
 
 def render(sidebar_handler):
     eg_dict = {
-        'Baseline Dataset': 'data/mitigation_SMOTE(binned_Percent Asian)_20211031.csv',
-        'Bias Mitigated - AIF360 Dataset': 'data/mitigation_aif360_20211031.csv'
+        'Baseline Dataset': 'data/baseline_binned.csv',
+        'Bias Mitigated - Undersampling Dataset': 'data/undersampling_binned.csv'
     }
 
     # Sidebar

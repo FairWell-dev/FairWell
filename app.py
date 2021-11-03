@@ -6,9 +6,7 @@ import streamlit as st
 import seaborn as sns
 import torch
 
-import features_page
-import data_fairness_page
-import model_bias_detection_page
+from pages import features_page, data_fairness_page, model_bias_detection_page
 
 def convert_to_tensor(df, columns, type='Float'):
     arr = np.array(df[[*columns]]).astype(int) 
@@ -84,9 +82,10 @@ def run_inference(file_list, df_dict, json_files): #TODO
 def sidebar_handler(label, type_list, eg_dict):
     
     # Example Use Case
-    eg_labels = eg_dict.keys()
-    selected_eg = list(eg_labels)[0]
+    eg_labels = list(eg_dict.keys())
     st.sidebar.title('Example: NYC Subway Traffic')
+    eg_df_dict, eg_key = read_csv_list(eg_dict.values(), eg_dict[eg_labels[0]])
+    eg_df_dict_rep_key = dict(zip(eg_labels, eg_df_dict.values()))
     example = ''
     for dataset in eg_labels:
         example += '- **%s**\n' % dataset
@@ -112,10 +111,10 @@ def sidebar_handler(label, type_list, eg_dict):
                 return pred_dict, select_key
             except:
                 st.warning("Please ensure you have uploaded the corresponding model, test dataset and features json files with the same name for each model")
-                return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
+                return eg_df_dict_rep_key, eg_labels[0]
         return df_dict, select_key
     else:
-        return read_csv_list(eg_dict.values(), eg_dict[selected_eg])
+        return eg_df_dict_rep_key, eg_labels[0]
 
 # Config 
 st.set_page_config(page_title='FairWell', 
