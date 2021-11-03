@@ -321,7 +321,7 @@ Based on our [Responsible AI Research](#responsible-ai-research), we have identi
 
 All 4 of our trained models (1 baseline, 3 post-mitigation) were then again uploaded onto the FairWell Model Bias Detection & Mitigation page, for a side-of-side comparison of the models' metrics.
 
-![](./images/Example%20-%20Mitigated%20Models%20Comparison.PNG)
+![](./images/Example%20-%20Mitigated%20Models%20Comparison.png)
 
 The chart depicts the trade-off between accuracy and fairness, where generally models that are more accurate tend to also exhibit a larger amount of bias. The selection of which model to use is hence highly subjective and varies on a case-by-case basis, depending on the priorities of the project.
 
