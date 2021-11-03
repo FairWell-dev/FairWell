@@ -190,6 +190,8 @@ Lastly, we merged the two datasets together. Our final dataset contains the foll
 Recall that bias can occur in the data even prior to training a model. To simplfy the assessment process, we first bin the continuous features into binary categories based on their average values. 
 For example, "Unemployment Rate".
 
+The binned dataset is then uploaded onto the FairWell Data Fairness Assessment page where all features were evaluated based on the Class Imbalance and Jensen-Shannon Divergence metrics for fairness. The features with high Class Imbalance and Jensen-Shannon Divergence were selected and pre-processing fairness mitigation is done on these features (details covered in Fairness Mitigation section below).
+
 ### Modelling with PyTorch
 
 
