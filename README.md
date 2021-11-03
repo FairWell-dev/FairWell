@@ -210,6 +210,8 @@ In order to conduct fairness analysis on these potentially sensitive features, w
 
 The binned dataset is then uploaded onto the **FairWell Data Fairness Assessment** page where all features were evaluated based on the Class Imbalance and Jensen-Shannon Divergence metrics for fairness. The features with the highest Jensen-Shannon Divergence were then identified for potential bias mitigation later on (more details covered in Fairness Mitigation section below).
 
+![](./images/Example%20-%20Data%20Fairness%20Assessment.PNG)
+
 ### Modelling with PyTorch
 
 
@@ -217,7 +219,7 @@ The binned dataset is then uploaded onto the **FairWell Data Fairness Assessment
 ### Fairness Assessment on Model Predictions
 With a baseline model trained successfully, we then uploaded the trained model, testing dataset and feature list onto the **FairWell Model Bias Detection & Mitigation** page. Inference is then run automatically within the FairWell environment to generate the following metrics for our baseline model: Demographic Parity, Equalized Odds and Predictive Parity.
 
-Again, we take the top 5 features with the highest Demographic Parity to focus on for potential bias mitigation.
+![](./images/Example%20-%20Mitigation%20Recommendations.PNG)
 
 Based on our assessment of both data biasand model bias, we narrowed down to a list of features that exhibited both high JS divergence and high DP disparity. On the top of that list was the Privileged: Lower Foreign-born population feature, with a score of 0.0264 max Jensen-Shannon Divergence and 0.2251 Demographic Parity.
 
@@ -240,7 +242,7 @@ Based on our [Responsible AI Research](#responsible-ai-research), we have identi
 ### Effect of Mitigation Approach
 All 4 of our trained models (1 baseline, 3 post-mitigation) were then again uploaded onto the FairWell Model Bias Detection & Mitigation page, for a side-of-side comparison of the models' metrics, both in terms of accuracy and in terms of fairness.
 
-
+![](./images/Example%20-%20Mitigated%20Models%20Comparison.PNG)
 
 ## Tools and Technologies Used
 - PyTorch
