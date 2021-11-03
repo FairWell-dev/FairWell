@@ -75,6 +75,12 @@ def get_metric(target, df, col):
 
     return col_score_list
 
+def infer_target_col(cols):
+    for idx, col in reversed(list(enumerate(cols))):
+        if ('target' in col) or ('label' in col):
+            return idx
+    return len(cols) - 1 # Assume right most column is target
+
 def render(sidebar_handler):
     eg_dict = {
         'Baseline Dataset': 'data/baseline_binned.csv',
@@ -93,7 +99,7 @@ def render(sidebar_handler):
 
     with col1: 
         target = st.selectbox('Target Feature',
-                            options=get_cols(df))
+                            options=get_cols(df), index=infer_target_col(get_cols(df)))
         
         col_to_select=[col for col in get_cols(df) 
                         if infer_dtypes(df)[col]=='categorical'
@@ -106,6 +112,10 @@ def render(sidebar_handler):
             eval_cols = container.multiselect('Features to evaluate (select one or more)',
                                             col_to_select,
                                             col_to_select)
+        elif select_key.lower() == 'baseline dataset':
+            eval_cols = container.multiselect('Features to evaluate (select one or more)',
+                                            col_to_select,
+                                            [col for col in col_to_select if col.startswith('Privileged')])
         else:
             eval_cols = container.multiselect('Features to evaluate (select one or more)',
                                             col_to_select)
