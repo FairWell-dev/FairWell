@@ -6,6 +6,8 @@
 
 https://fairwell-app.herokuapp.com/
 
+***
+
 ## Introduction
 
 FairWell is a Responsible AI tool developed using Streamlit. The aim is to address model biasness on specific groups of people, allowing data scientists to evaluate their dataset and model predictions, and take steps toward making their datasets more inclusive and their models less biased. The tool allows users to detect fairness issues in both datasets and models, and in turn, get inspiration on various mitigation approaches through mitigation recommendations.
@@ -81,6 +83,8 @@ Post-processing transforms the model prediction such that the final decisions me
 **Per-subgroup threshold**: Optimise thresholds for each subgroup to achieve equalized odds
 - [AI Fairness 360](https://aif360.readthedocs.io/) provides an API for finding these probabilities
 
+***
+
 ### Responsible AI in Businesses
 
 Businesses have recognised the need to develop AI models that are responsible and fair towards their data inputs. 
@@ -99,6 +103,8 @@ As Facebook progresses in building Responsible AI, they are guided by these key 
 - Robustness & Safety
 - Transparency & Control
 - Accountability & Governance
+
+***
 
 ## FairWell
 
@@ -144,6 +150,8 @@ Users will first select the target feature from the dataset, along with the feat
 A scatter plot that plots the **relationship between the selected fairness metric and each model's performance** will be shown. This is coupled with an expandable insights section, allowing users to evaluate the potential trade-offs from their models and fairness.
 
 Lastly, the page will compare the aforementioned fairness metrics of each feature selected for fairness assessment, providing users with useful **mitigation approaches** they can take towards fairer model development. After applying fairness mitigation, users can revisit this page with a new dataset and model for comparison against their previous iterations.
+
+***
 
 ## Dataset: New York City (NYC) Subway Traffic
 
@@ -257,7 +265,25 @@ These features were binned into binary features by using the mean as the thresho
 ![](./images/Example%20-%20Data%20Fairness%20Assessment.PNG)
 
 ### Modelling with PyTorch
+Pytorch was then used to build a baseline neural network model.
 
+The dataset we are working with is a 2-dimensional dataset, consisting of both spatial and temporal dimensions; also frequently known as "panel” data. Other approaches to similar problems often include more complex architectures involving LSTMs, CNNs or transformers. However, in this use case, we opted to keep things simple by using a standard multi-input feedforward network.
+
+There are 2 main reasons behind this decision. Firstly, since the inference process is done via the FairWell process (on a browser), we wanted to keep inference time to a minimum. Secondly, as we were dealing with only 3 months worth of data, each neighborhood only had 546 timesteps of data. In addition, our analysis had shown that the time series data exhibited strong trends of seasonality, which meant that feature extraction would be likely sufficient.
+
+Hence, we extracted 3 time series features `(day, day of week, hour)` from the original timestamp column, and used those as inputs into the model.
+
+As for the spatial dimension, we label encoded the names of each neighborhood, and passed that column into an Embedding layer with dimensions = 51. This Embedding layer will allow the model to learn connections between the different neighborhoods and naturally cluster similar neighborhoods together.
+
+The resultant high level model architecture is as below:
+![](./images/Model%20Architecture.png)
+
+After a couple of rounds of hyperparameter tuning, we settled on this set of hyperparameters:
+* batch_size=32, 
+* max_epochs = 100,
+* lr = 0.005
+
+The notebook for data preparation and model training can be found here. 
 
 ### Fairness Assessment on Model Predictions
 
@@ -288,7 +314,7 @@ Comparing the Demographic Parity for each feature, all of the values were lower.
 
 ### Fairness Mitigation
 
-Based on our [Responsible AI Research](#responsible-ai-research), we have identified two approaches in mitigating bias, pre-processing the dataset and in-processing where we impose a fairness loss constraint during model training. In our example use case, we tried 3 of those approaches.
+Based on our [Responsible AI Research](#responsible-ai-research), we have identified two approaches in mitigating bias, pre-processing the dataset and in-processing where we impose a fairness loss constraint during model training. In our example use case, we tried 3 of those approaches. For all datasets, time-based features were generated and min-max transformation of numerical features and label encoding of categorical features was conducted.
 
 #### Pre-processing
 
@@ -313,7 +339,7 @@ Based on our [Responsible AI Research](#responsible-ai-research), we have identi
 
 All 4 of our trained models (1 baseline, 3 post-mitigation) were then again uploaded onto the FairWell Model Bias Detection & Mitigation page, for a side-of-side comparison of the models' metrics.
 
-![](./images/Example%20-%20Mitigated%20Models%20Comparison.PNG)
+![](./images/Example%20-%20Mitigated%20Models%20Comparison.png)
 
 The chart depicts the trade-off between accuracy and fairness, where generally models that are more accurate tend to also exhibit a larger amount of bias. The selection of which model to use is hence highly subjective and varies on a case-by-case basis, depending on the priorities of the project.
 
@@ -358,6 +384,7 @@ We created a framework for building Responsible Machine Learning Models, providi
 
 FairWell provides a hollistic approach to incorporating Responsible AI practices into their machine learning workflows. We will continue to interate and improve on FairWell in future. This includes making FairWell available for multiclass classification and regression problems, expanding supported machine learning libraries beyond PyTorch, and automating model building and tuning. With FairWell, we aim to make all models fair and well, so you can bid farewell to unknown model bias.
 
+***
 
 ## Tools and Technologies Used
 
