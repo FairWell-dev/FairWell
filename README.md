@@ -444,3 +444,7 @@ FairWell provides a hollistic approach to incorporating Responsible AI practices
 ## Acknowledgements
 
 Thanks to our friends at Mastercard (Apurva, Bharathi, Hui Chiang, Idaly and Louis) for their advice and guidance on AI fairness.
+
+## GitHub Repository
+
+https://github.com/FairWell-dev/FairWell
