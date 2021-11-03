@@ -1,5 +1,6 @@
 import fairlearn.metrics as flm
 import matplotlib.pyplot as plt
+from matplotlib.ticker import PercentFormatter
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -130,8 +131,9 @@ def render(sidebar_handler):
 
         st.subheader('Fairness Assessment and Model Comparison (per Feature)')
 
+        combined_df = pd.DataFrame()
         for col_name in cols_to_eval:
-            st.markdown('##### ' + col_name.replace('_', ' '))
+            st.markdown('##### Feature: ' + col_name.replace('_', ' '))
             col1, col2 = st.columns([0.6, 0.4])
 
             with col1:
@@ -163,6 +165,10 @@ def render(sidebar_handler):
                     'Predictive Parity': ppd_l
                 }, index=model_name_list)
                 st.table(overall_df)
+
+                # Add to combined df
+                overall_df['Feature'] = col_name.replace('_', ' ')
+                combined_df = pd.concat([combined_df, overall_df])
 
                 for model_name in model_name_list:
                     df = pred_df_dict[model_name]
@@ -224,5 +230,91 @@ def render(sidebar_handler):
                                                      highest_acc, highest_acc_disparity,
                                                      lowest_disparity, lowest_disparity_acc))
 
+        
+        st.subheader(y_axis_metric.title() + ' across Models')
 
-    st.subheader("Recommended Bias Mitigation Techniques")
+        with st.expander('Explanation'):
+            st.markdown("""
+                    The table shows the diaparity scores across features, sorted in descending order. 
+                    Features at the top of the list should be prioritised for mitigation - recommendations for mitigation techniques \
+                    can be viewed after this section.
+                """.format())
+
+        combined_df = combined_df.reset_index()
+        combined_df = combined_df.drop('Accuracy', axis=1)
+        combined_df = combined_df.rename({'index': 'Model'}, axis=1)
+
+        for model_name in model_name_list:
+            st.markdown('##### Model: ' + model_name)
+            combined_df_filtered = combined_df.loc[combined_df['Model'] == model_name]
+            combined_df_filtered = combined_df_filtered.drop('Model', axis=1)
+            combined_df_filtered = combined_df_filtered.sort_values(y_axis_metric, ascending=False)
+
+            col1, col2 = st.columns([0.6, 0.4])
+            with col1:
+                # colour_map = sns.light_palette('lightblue', as_cmap=True)
+                # st.table(combined_df_filtered.set_index('Feature').style.background_gradient(cmap=colour_map, 
+                #                                                                              subset=y_axis_metric))
+                st.table(combined_df_filtered.set_index('Feature').style.bar(color='#4267B2', 
+                                                                                subset=y_axis_metric))
+
+            with col2:
+                combined_df_filtered['cum_perc'] = combined_df_filtered[y_axis_metric].cumsum() / combined_df_filtered[y_axis_metric].sum() * 100
+                fig, ax = plt.subplots(figsize=(5, 5))
+                ax.bar(combined_df_filtered['Feature'], combined_df_filtered[y_axis_metric])
+                ax.set_ylabel(y_axis_metric.title())
+                ax2 = ax.twinx()
+                ax2.plot(combined_df_filtered['Feature'], combined_df_filtered['cum_perc'], color='orange', marker='.')
+                ax2.yaxis.set_major_formatter(PercentFormatter())
+                ax2.set_ylabel('Cumulative Disparity (%)')
+                ax.xaxis.set_tick_params(rotation=90)
+                st.pyplot(fig)
+
+        st.subheader("Mitigation Recommendations: Bias Mitigation Techniques")
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.markdown('##### Pre-Processing')
+            st.markdown("""
+                - Suppression: Reduce discrimination between target and sensitive feature _S_ by removing _S_ \
+                and features highly correlated to _S_
+                    - Remove sensitive features and their correlated features with \
+                    [Fairlearn](https://fairlearn.org/v0.7.0/api_reference/fairlearn.preprocessing.html)
+                - Re-weighing: Add a weights column to the dataset for each (feature group, label) combination \
+                to ensure dataset is fair before training - observations with higher weights should be prioritised \
+                ("seen more") by the model during training
+                    - [AI Fairness 360](https://aif360.readthedocs.io) \
+                    provides an [API for generating weights](https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.preprocessing.Reweighing.html#aif360.algorithms.preprocessing.Reweighing)
+                - Sampling: Calculate sample sizes for each (sensitive feature, label) combination to reduce \
+                discrimination - oversample the minority groups and undersample the majority groups using Uniform \
+                Sampling and/or Preferential Sampling techniques  
+                    - Generate synthetic data with Generative Adversarial Networks (GANs) \
+                    [TorchGAN](https://torchgan.readthedocs.io/en/latest/index.html), \
+                    [Mimicry] (https://github.com/kwotsin/mimicry), \
+                    [TF-GAN] (https://github.com/tensorflow/gan)
+                    - Generate synthetic data with \
+                    [Variational Autoencoder (VAE) with PyTorch](https://visualstudiomagazine.com/Articles/2021/05/06/variational-autoencoder.aspx)
+                    - SMOTE (Synthetic Minority Over-sampling Technique) using [imbalanced-learn](https://imbalanced-learn.org/stable/index.html)
+            """.format())
+
+        with col2:
+            st.markdown('##### In-Processing')
+            st.markdown("""
+                - Fairness loss metrics: Incorporate custom loss functions when training the model, making them a constraint
+                    - [FairTorch](https://github.com/wbawakate/fairtorch) applies group fairness \
+                    (demographic parity and equalized odds) as losses for model training in PyTorch
+                - Discrimination-aware Regularization: Adding discrimination-aware regularization term to objective function
+                    - - [AI Fairness 360](https://aif360.readthedocs.io) \
+                    provides an [API for adding regularization the model](https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.inprocessing.PrejudiceRemover.html)
+            """.format())
+
+        with col3:
+            st.markdown('##### Post-Processing')
+            st.markdown("""
+                - Calibrated predictions: Adjust model predictions to achieve equalized odds objective
+                    - [AI Fairness 360](https://aif360.readthedocs.io) \
+                    provides an [API for calibrating scores](https://aif360.readthedocs.io/en/v0.2.3/modules/postprocessing.html#aif360.algorithms.postprocessing.CalibratedEqOddsPostprocessing)
+                - Per-subgroup threshold: Optimise thresholds for each subgroup to achieve equalized odds
+                    - [AI Fairness 360](https://aif360.readthedocs.io) \
+                    provides an [API for finding these probabilities](https://aif360.readthedocs.io/en/v0.2.3/modules/postprocessing.html#equality-of-odds)
+            """.format())
